@@ -114,7 +114,7 @@
   .solo-lectores { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .carrusel { position: relative; overflow: hidden; }
   .carrusel__pista { display: flex; transition: transform .6s cubic-bezier(.65,0,.35,1); }
-  .carrusel__slide { min-width: 100%; aspect-ratio: 1920 / 571; }
+  .carrusel__slide { min-width: 100%; aspect-ratio: 1920 / 567; }
   .carrusel__slide img { width: 100%; height: 100%; object-fit: cover; }
   .carrusel__btn { position: absolute; top: 50%; translate: 0 -50%; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(0,0,0,.45); color: var(--blanco); cursor: pointer; display: grid; place-items: center; transition: background .2s; }
   .carrusel__btn:hover { background: rgba(0,0,0,.75); }
@@ -131,9 +131,11 @@
   .equipo__carrusel { --visibles: 3; position: relative; z-index: 1; overflow-x: clip; overflow-y: visible; }
   .equipo__pista { display: flex; transition: transform .7s cubic-bezier(.65,0,.35,1); }
   .persona { flex: 0 0 calc(100% / var(--visibles)); padding: 0 4px; text-align: center; }
-  .equipo__controles { display: flex; justify-content: center; gap: 12px; margin-top: 24px; }
-  .eq-flecha { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(0,0,0,.3); background: transparent; color: var(--negro); cursor: pointer; display: grid; place-items: center; transition: background .2s, color .2s, border-color .2s; }
-  .eq-flecha:hover { background: var(--rojo); border-color: var(--rojo); color: #fff; }
+  .equipo__marco { position: relative; }
+  .eq-flecha { position: absolute; top: 40%; z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255,255,255,.75); color: var(--negro); cursor: pointer; display: grid; place-items: center; opacity: .55; transition: opacity .2s, background .2s, color .2s; }
+  .equipo__marco:hover .eq-flecha { opacity: 1; }
+  .eq-flecha--izq { left: 0; } .eq-flecha--der { right: 0; }
+  .eq-flecha:hover { background: var(--rojo); color: #fff; }
   .eq-flecha svg { width: 22px; height: 22px; fill: currentColor; }
   .persona__foto { height: clamp(160px, 31vw, 420px); display: flex; align-items: flex-end; justify-content: center; }
   .persona__foto img { max-height: 100%; max-width: 100%; width: auto; object-fit: contain; object-position: bottom; filter: grayscale(1); }
@@ -343,12 +345,12 @@
   <section class="equipo" id="equipo">
     <div class="contenedor">
       <h2 class="titulo-seccion aparecer">Nuestro Equipo</h2>
-      <div class="equipo__carrusel" id="equipo-carrusel">
-        <div class="equipo__pista" id="equipo-grid"></div>
-      </div>
-      <div class="equipo__controles">
-        <button class="eq-flecha" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
-        <button class="eq-flecha" data-dir="1" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+      <div class="equipo__marco">
+        <div class="equipo__carrusel" id="equipo-carrusel">
+          <div class="equipo__pista" id="equipo-grid"></div>
+        </div>
+        <button class="eq-flecha eq-flecha--izq" data-dir="-1" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+        <button class="eq-flecha eq-flecha--der" data-dir="1" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
       </div>
     </div>
   </section>
@@ -361,6 +363,7 @@
         <label>Nombre<input type="text" name="nombre" placeholder="Tu nombre" required autocomplete="name"></label>
         <label>Email<input type="email" name="email" placeholder="tu@email.com" required autocomplete="email"></label>
         <label>Tu mensaje<textarea name="mensaje" placeholder="Contanos sobre tu proyecto" required></textarea></label>
+        <input type="checkbox" name="botcheck" class="solo-lectores" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit">Enviar</button>
         <p class="form__aviso" id="form-aviso" role="status"></p>
       </form>
@@ -581,12 +584,39 @@
   }), { threshold: .15 });
   document.querySelectorAll(".aparecer").forEach(el => obs.observe(el));
 
-  // Formulario (en la versión final se conecta a un servicio gratuito que te envía el mensaje por mail)
-  document.getElementById("form").addEventListener("submit", e => {
+  /* Formulario de contacto: los mensajes llegan por mail a través de Web3Forms (gratis).
+     WEB3FORMS_KEY es la clave que Web3Forms le manda por mail a pardoconsultas@gmail.com. */
+  const WEB3FORMS_KEY = "";
+  document.getElementById("form").addEventListener("submit", async e => {
     e.preventDefault();
-    const f = e.target, aviso = document.getElementById("form-aviso");
+    const f = e.target, aviso = document.getElementById("form-aviso"), boton = f.querySelector('button[type="submit"]');
     if (!f.checkValidity()) { aviso.textContent = "Completá tu nombre, un email válido y tu mensaje."; return; }
-    aviso.textContent = "Vista previa: en la versión final este mensaje te llega a pardoconsultas@gmail.com.";
+    if (f.botcheck.checked) return; // robot
+    if (!WEB3FORMS_KEY) { aviso.textContent = "El formulario todavía no está conectado. Escribinos a pardoconsultas@gmail.com."; return; }
+    boton.disabled = true; boton.textContent = "Enviando…"; aviso.textContent = "";
+    try {
+      const r = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: "Nuevo mensaje desde la web de Pardo Studio",
+          from_name: "Web Pardo Studio",
+          nombre: f.nombre.value,
+          email: f.email.value,
+          mensaje: f.mensaje.value,
+          botcheck: false
+        })
+      });
+      const datos = await r.json();
+      if (!datos.success) throw new Error(datos.message);
+      f.reset();
+      aviso.textContent = "¡Gracias! Recibimos tu mensaje y te respondemos a la brevedad.";
+    } catch (err) {
+      aviso.textContent = "No se pudo enviar. Probá de nuevo o escribinos a pardoconsultas@gmail.com.";
+    } finally {
+      boton.disabled = false; boton.textContent = "Enviar";
+    }
   });
 </script>
 </body>
