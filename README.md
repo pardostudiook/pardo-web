@@ -9,6 +9,9 @@ No usa frameworks ni pasos de compilación: se edita y se publica tal cual.
 |---|---|
 | `index.html` | Toda la página: estructura (HTML), diseño (CSS, dentro de `<style>`) y funciones (JavaScript, dentro de `<script>`) |
 | `data/proyectos.json` | Lista de videos del portfolio (YouTube). Es lo que se actualiza al subir un video nuevo |
+| `data/contenido.json` | Videos verticales de "Contenido para marcas" (archivos en `assets/verticales/`) |
+| `data/equipo.json` | Integrantes del equipo |
+| `herramientas/procesar-vertical.sh` | Comprime un video vertical para la web y crea su portada |
 | `assets/` | Imágenes, logo y video de fondo |
 
 ## Agregar un proyecto al portfolio
