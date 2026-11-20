@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /herramientas/
+
+Sitemap: https://pardostudio.com.ar/sitemap.xml
