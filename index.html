@@ -173,10 +173,8 @@
   .eq-flecha svg { width: 22px; height: 22px; fill: currentColor; }
   .persona__foto { height: clamp(160px, 31vw, 420px); display: flex; align-items: flex-end; justify-content: center; }
   .persona__foto img { max-height: 100%; max-width: 100%; width: auto; object-fit: contain; object-position: bottom; filter: grayscale(1); }
-  .persona--libre .persona__foto svg { height: 80%; fill: rgba(0,0,0,.12); }
+  .persona--sin-foto .persona__foto svg { height: 80%; fill: rgba(0,0,0,.12); }
   .persona h3 { position: relative; display: inline-block; margin-top: -1.1em; padding: 4px 14px; background: var(--rojo); color: #fff; font-size: clamp(13px, 1.7vw, 22px); font-weight: 900; }
-  .persona--libre h3 { background: rgba(0,0,0,.18); }
-  .persona--libre p { color: rgba(0,0,0,.4); }
   .persona p { margin-top: 6px; font-weight: 500; font-size: clamp(12px, 1.3vw, 16px); }
   .persona a { display: inline-block; margin-top: 2px; color: var(--rojo); font-weight: 700; text-decoration: none; font-size: clamp(12px, 1.3vw, 16px); }
   .persona a:hover { text-decoration: underline; }
@@ -201,7 +199,6 @@
   .ig-card__marco video { width: 100%; height: 100%; object-fit: cover; display: block; }
   .ig-card__sonido { position: absolute; right: 10px; bottom: 10px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(0,0,0,.55); color: #fff; display: grid; place-items: center; cursor: pointer; }
   .ig-card__sonido svg { width: 18px; height: 18px; fill: currentColor; }
-  .ig-card__cliente { margin-top: 10px; font-size: 13px; color: var(--texto-suave); letter-spacing: .04em; text-transform: uppercase; }
 
   /* ---------- Contacto ---------- */
   .contacto { position: relative; padding: clamp(72px, 10vw, 140px) 0; background: url("assets/contacto.jpg") right center / cover; }
@@ -519,16 +516,40 @@
   const igPista = document.getElementById("ig-pista");
   const iconoMudo = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.6 3 2.7-2.7-1.4-1.4-2.7 2.7-2.7-2.7-1.4 1.4 2.7 2.7-2.7 2.7 1.4 1.4 2.7-2.7 2.7 2.7 1.4-1.4z"/></svg>';
   const iconoSonido = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
+  // Orden variado: cada vez que se carga la página se mezclan los videos,
+  // alternando clientes para que no queden dos del mismo cliente seguidos.
+  function mezclar(lista) {
+    const a = lista.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function mezclarPorCliente(items) {
+    const grupos = {};
+    items.forEach(p => (grupos[p.cliente] = grupos[p.cliente] || []).push(p));
+    const colas = mezclar(Object.values(grupos)).map(mezclar);
+    const resultado = [];
+    let anterior = null;
+    while (colas.some(c => c.length)) {
+      // tomar del cliente con más videos pendientes que no sea el anterior
+      const disponibles = colas.filter(c => c.length && c[0].cliente !== anterior);
+      const fuente = (disponibles.length ? disponibles : colas.filter(c => c.length))
+        .sort((x, y) => y.length - x.length || Math.random() - .5)[0];
+      const p = fuente.shift();
+      resultado.push(p);
+      anterior = p.cliente;
+    }
+    return resultado;
+  }
+
   fetch("data/contenido.json", { cache: "no-cache" })
     .then(r => r.json())
     .then(items => {
-      igPista.innerHTML = items.map(p => `
+      igPista.innerHTML = mezclarPorCliente(items).map(p => `
         <article class="ig-card">
           <div class="ig-card__marco">
             <video src="${p.video}" poster="${p.video.replace(/\.mp4$/, ".jpg")}" muted loop playsinline preload="none" aria-label="Video para ${p.cliente}"></video>
             <button class="ig-card__sonido" aria-label="Activar sonido">${iconoMudo}</button>
           </div>
-          <p class="ig-card__cliente">${p.cliente}</p>
         </article>`).join("");
       // Se reproducen solos (sin sonido) cuando están a la vista, y se pausan al salir
       const vista = new IntersectionObserver(es => es.forEach(e => {
@@ -559,17 +580,13 @@
   fetch("data/equipo.json", { cache: "no-cache" })
     .then(r => r.json())
     .then(gente => {
-      document.getElementById("equipo-grid").innerHTML = gente.map(p => p.lugarLibre ? `
-        <article class="persona persona--libre">
-          <div class="persona__foto">${siluetaSvg}</div>
+      // Sin foto todavía: se muestra una silueta con el nombre y el rol
+      document.getElementById("equipo-grid").innerHTML = gente.map(p => `
+        <article class="persona${p.foto ? "" : " persona--sin-foto"}">
+          <div class="persona__foto">${p.foto ? `<img src="${p.foto}" alt="${p.nombre}" loading="lazy">` : siluetaSvg}</div>
           <h3>${p.nombre}</h3>
           <p>${p.rol}</p>
-        </article>` : `
-        <article class="persona">
-          <div class="persona__foto"><img src="${p.foto}" alt="${p.nombre}" loading="lazy"></div>
-          <h3>${p.nombre}</h3>
-          <p>${p.rol}</p>
-          <a href="https://www.instagram.com/${p.instagram}/" target="_blank" rel="noopener">@${p.instagram}</a>
+          ${p.instagram ? `<a href="https://www.instagram.com/${p.instagram}/" target="_blank" rel="noopener">@${p.instagram}</a>` : ""}
         </article>`).join("");
       carruselEquipo();
     });

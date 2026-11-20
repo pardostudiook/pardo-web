@@ -1,8 +1,122 @@
 [
-  { "video": "assets/verticales/vertical-01.mp4", "cliente": "Cliente a definir" },
-  { "video": "assets/verticales/vertical-02.mp4", "cliente": "Cliente a definir" },
-  { "video": "assets/verticales/vertical-03.mp4", "cliente": "Cliente a definir" },
-  { "video": "assets/verticales/vertical-04.mp4", "cliente": "Cliente a definir" },
-  { "video": "assets/verticales/vertical-05.mp4", "cliente": "Cliente a definir" },
-  { "video": "assets/verticales/vertical-06.mp4", "cliente": "Cliente a definir" }
+  {
+    "video": "assets/verticales/riica-algaria-03.mp4",
+    "cliente": "RIICA",
+    "archivo": "01 RIICA ALGARIA 03.mp4"
+  },
+  {
+    "video": "assets/verticales/riica-algaria-05.mp4",
+    "cliente": "RIICA",
+    "archivo": "01 RIICA ALGARIA 05.mp4"
+  },
+  {
+    "video": "assets/verticales/riica-almora-02.mp4",
+    "cliente": "RIICA",
+    "archivo": "01 RIICA ALMORA 02.mp4"
+  },
+  {
+    "video": "assets/verticales/riica-almora-03.mp4",
+    "cliente": "RIICA",
+    "archivo": "01 RIICA ALMORA 03.mp4"
+  },
+  {
+    "video": "assets/verticales/riica-almora-05.mp4",
+    "cliente": "RIICA",
+    "archivo": "01 RIICA ALMORA 05.mp4"
+  },
+  {
+    "video": "assets/verticales/prisamata-01.mp4",
+    "cliente": "Prisamata",
+    "archivo": "01.mp4"
+  },
+  {
+    "video": "assets/verticales/prisamata-05.mp4",
+    "cliente": "Prisamata",
+    "archivo": "05.mp4"
+  },
+  {
+    "video": "assets/verticales/prisamata-09.mp4",
+    "cliente": "Prisamata",
+    "archivo": "09.mp4"
+  },
+  {
+    "video": "assets/verticales/prisamata-11.mp4",
+    "cliente": "Prisamata",
+    "archivo": "11.mp4"
+  },
+  {
+    "video": "assets/verticales/boulevard-reel-1.mp4",
+    "cliente": "Casino Boulevard",
+    "archivo": "Copia de REEL 1.mp4"
+  },
+  {
+    "video": "assets/verticales/boulevard-reel-2.mp4",
+    "cliente": "Casino Boulevard",
+    "archivo": "Copia de REEL 2.mp4"
+  },
+  {
+    "video": "assets/verticales/boulevard-reel-3.mp4",
+    "cliente": "Casino Boulevard",
+    "archivo": "Copia de REEL 3.mp4"
+  },
+  {
+    "video": "assets/verticales/boulevard-reel-4.mp4",
+    "cliente": "Casino Boulevard",
+    "archivo": "Copia de REEL 4.mp4"
+  },
+  {
+    "video": "assets/verticales/boulevard-reel-5.mp4",
+    "cliente": "Casino Boulevard",
+    "archivo": "Copia de REEL 5.mp4"
+  },
+  {
+    "video": "assets/verticales/satoshi-apis.mp4",
+    "cliente": "Satoshi Tango",
+    "archivo": "Copia de 09-V-APIs.mp4"
+  },
+  {
+    "video": "assets/verticales/satoshi-rwa.mp4",
+    "cliente": "Satoshi Tango",
+    "archivo": "Copia de VE-03-RWA.mp4"
+  },
+  {
+    "video": "assets/verticales/satoshi-pingpong.mp4",
+    "cliente": "Satoshi Tango",
+    "archivo": "Copia de VE-04-PINGPONG.mp4"
+  },
+  {
+    "video": "assets/verticales/pbsdc-introduccion.mp4",
+    "cliente": "PBSDC",
+    "archivo": "Copia de 01-10 PBSDC introduction.mp4"
+  },
+  {
+    "video": "assets/verticales/pbsdc-cervical.mp4",
+    "cliente": "PBSDC",
+    "archivo": "Copia de 03-09 Cervical (ADR).mp4"
+  },
+  {
+    "video": "assets/verticales/videocaso-01.mp4",
+    "cliente": "Videocasos",
+    "archivo": "01 VIDEOCASO.mp4"
+  },
+  {
+    "video": "assets/verticales/videocaso-03.mp4",
+    "cliente": "Videocasos",
+    "archivo": "03 VIDEOCASO.mp4"
+  },
+  {
+    "video": "assets/verticales/posicionamiento-ping-pong.mp4",
+    "cliente": "Videocasos",
+    "archivo": "04 POSICIONAMIENTO PING PONG.mp4"
+  },
+  {
+    "video": "assets/verticales/reel-cobertura.mp4",
+    "cliente": "Cobertura",
+    "archivo": "Copia de REEL COBERTURA.mp4"
+  },
+  {
+    "video": "assets/verticales/pardo-alcance.mp4",
+    "cliente": "Pardo Studio",
+    "archivo": "PARDO ALCANCE.mp4"
+  }
 ]

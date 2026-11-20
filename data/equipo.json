@@ -1,8 +1,9 @@
 [
-  { "nombre": "Luke Gumba", "rol": "Director Creativo", "instagram": "lukegumba.ad", "foto": "assets/luke.png" },
-  { "nombre": "Florencia Rivero", "rol": "Jefa de cuentas", "instagram": "florencia.rivero__", "foto": "assets/flor.png" },
-  { "nombre": "Emanuel Abregu", "rol": "Jefe de Post producción", "instagram": "ema_abregu", "foto": "assets/ema.png" },
-  { "nombre": "Nuevo integrante", "rol": "Próximamente", "lugarLibre": true },
-  { "nombre": "Nuevo integrante", "rol": "Próximamente", "lugarLibre": true },
-  { "nombre": "Nuevo integrante", "rol": "Próximamente", "lugarLibre": true }
+  { "nombre": "Luke Gumba", "rol": "Director de Arte", "foto": "assets/luke.png" },
+  { "nombre": "Florencia Rivero", "rol": "Jefa de cuentas", "foto": "assets/flor.png" },
+  { "nombre": "Emanuel Abregu", "rol": "Jefe de Post producción", "foto": "assets/ema.png" },
+  { "nombre": "Rocío Katsinis", "rol": "Productora" },
+  { "nombre": "Josefina Grigoras", "rol": "Social Media" },
+  { "nombre": "Mariano Pica", "rol": "Editor" },
+  { "nombre": "Elena Baltazar", "rol": "Diseñadora Gráfica" }
 ]
