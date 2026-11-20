@@ -1,0 +1,8 @@
+[
+  { "nombre": "Luke Gumba", "rol": "Director Creativo", "instagram": "lukegumba.ad", "foto": "assets/luke.png" },
+  { "nombre": "Florencia Rivero", "rol": "Jefa de cuentas", "instagram": "florencia.rivero__", "foto": "assets/flor.png" },
+  { "nombre": "Emanuel Abregu", "rol": "Jefe de Post producción", "instagram": "ema_abregu", "foto": "assets/ema.png" },
+  { "nombre": "Nuevo integrante", "rol": "Próximamente", "lugarLibre": true },
+  { "nombre": "Nuevo integrante", "rol": "Próximamente", "lugarLibre": true },
+  { "nombre": "Nuevo integrante", "rol": "Próximamente", "lugarLibre": true }
+]
