@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><!-- versión de prueba: quitar al publicar en pardostudio.com.ar -->
+<title>PARDO STUDIO | Audiovisual</title>
+<meta name="description" content="Pardo Studio: productora audiovisual en Salta, Argentina. Dirección creativa, producción de contenido, VFX, color grading y animación 2D y 3D.">
+<meta property="og:title" content="PARDO STUDIO | Audiovisual">
+<meta property="og:description" content="Creatividad visual para tu historia.">
+<meta property="og:image" content="assets/hero-poster.jpg">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0b0a0b;
+    --gris: #161416;
+    --blanco: #ffffff;
+    --texto-suave: #c9c6c9;
+    --rojo: #c4161c;
+    --rojo-oscuro: #8f0f14;
+    --header-h: 72px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: "Red Hat Display", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img, video { display: block; max-width: 100%; }
+  a { color: inherit; }
+  .contenedor { width: min(1200px, 100% - 32px); margin-inline: auto; }
+
+  /* ---------- Header ---------- */
+  .header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    height: var(--header-h);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 clamp(16px, 4vw, 40px);
+    background: rgba(11, 10, 11, .55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background .3s;
+  }
+  .header.con-fondo { background: rgba(11, 10, 11, .92); }
+  .header__logo img { width: 44px; height: 44px; }
+  .nav { display: flex; gap: clamp(16px, 3vw, 44px); }
+  .nav a { text-decoration: none; font-size: 15px; font-weight: 500; opacity: .85; transition: opacity .2s, color .2s; }
+  .nav a:hover { opacity: 1; color: var(--rojo); }
+  .redes { display: flex; gap: 14px; align-items: center; }
+  .redes a { display: grid; place-items: center; width: 26px; height: 26px; opacity: .9; transition: opacity .2s, transform .2s; }
+  .redes a:hover { opacity: 1; transform: translateY(-2px); }
+  .redes svg { width: 22px; height: 22px; fill: currentColor; }
+  .menu-btn { display: none; background: none; border: 0; color: var(--blanco); cursor: pointer; width: 40px; height: 40px; }
+  .menu-btn span { display: block; width: 24px; height: 2px; background: currentColor; margin: 5px auto; transition: transform .3s, opacity .3s; }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; height: 100svh; min-height: 560px; display: grid; place-items: center; text-align: center; overflow: hidden; }
+  .hero video, .hero__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.45) 60%, var(--negro) 100%); }
+  .hero__contenido { position: relative; z-index: 1; padding: 0 16px; }
+  .hero h1 { font-size: clamp(64px, 16vw, 210px); font-weight: 900; letter-spacing: -.02em; line-height: .9; }
+  .hero p { font-size: clamp(18px, 2.4vw, 28px); margin-top: 12px; font-weight: 500; }
+  .boton {
+    display: inline-block; margin-top: 32px; padding: 14px 30px;
+    border: 1.5px solid var(--blanco); border-radius: 999px;
+    text-decoration: none; font-weight: 700; font-size: 15px;
+    transition: background .25s, color .25s, border-color .25s;
+  }
+  .boton:hover { background: var(--rojo); border-color: var(--rojo); }
+  .hero__flecha { position: absolute; bottom: 28px; left: 50%; translate: -50% 0; z-index: 1; opacity: .7; animation: bajar 2s infinite; }
+  @keyframes bajar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+  /* ---------- Áreas ---------- */
+  .areas { position: relative; padding: clamp(80px, 12vw, 160px) 0; background: url("assets/bosque.jpg") center / cover; }
+  .areas::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+  .areas__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 80px); }
+  .area { text-align: center; }
+  .area h2 { font-size: clamp(40px, 6.5vw, 86px); font-weight: 900; line-height: .95; letter-spacing: -.01em; }
+  .area h2 span { display: block; color: transparent; -webkit-text-stroke: 1.5px var(--blanco); }
+  .area p { margin: 22px auto 0; max-width: 360px; font-size: 18px; color: var(--texto-suave); line-height: 1.5; }
+
+  /* ---------- Portfolio ---------- */
+  .portfolio { padding: clamp(72px, 10vw, 120px) 0; background: var(--negro) url("assets/papel-negro.jpg") center / cover; }
+  .titulo-seccion { font-size: clamp(40px, 7vw, 88px); font-weight: 900; line-height: 1; margin-bottom: 40px; letter-spacing: -.01em; }
+  .filtros { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+  .filtro { background: transparent; color: var(--blanco); border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 8px 18px; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .2s; }
+  .filtro:hover { border-color: var(--blanco); }
+  .filtro.activo { background: var(--rojo); border-color: var(--rojo); }
+  .grilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 28px 20px; }
+  .video-card { background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+  .video-card__img { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px; background: var(--gris); }
+  .video-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s, filter .3s; }
+  .video-card:hover .video-card__img img { transform: scale(1.05); filter: brightness(.7); }
+  .video-card__play { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .3s; }
+  .video-card__play svg { width: 64px; height: 64px; }
+  .video-card:hover .video-card__play, .video-card:focus-visible .video-card__play { opacity: 1; }
+  .video-card__duracion { position: absolute; right: 8px; bottom: 8px; background: rgba(0,0,0,.75); padding: 2px 7px; border-radius: 4px; font-size: 12px; font-weight: 700; }
+  .video-card__titulo { margin-top: 12px; font-size: 15px; font-weight: 700; text-transform: uppercase; line-height: 1.3; }
+  .video-card__cliente { margin-top: 4px; font-size: 13px; color: var(--texto-suave); }
+  .cargar-mas { display: block; margin: 48px auto 0; background: transparent; color: var(--blanco); cursor: pointer; font-family: inherit; }
+  .cargar-mas[hidden] { display: none; }
+
+  /* ---------- Servicios ---------- */
+  .servicios { padding: clamp(72px, 10vw, 120px) 0; background: linear-gradient(180deg, var(--rojo-oscuro), #3a0507); }
+  .servicios .titulo-seccion { text-align: center; }
+  .carrusel { position: relative; overflow: hidden; border-radius: 8px; }
+  .carrusel__pista { display: flex; transition: transform .6s cubic-bezier(.65,0,.35,1); }
+  .carrusel__slide { min-width: 100%; aspect-ratio: 1920 / 571; }
+  .carrusel__slide img { width: 100%; height: 100%; object-fit: cover; }
+  .carrusel__btn { position: absolute; top: 50%; translate: 0 -50%; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(0,0,0,.45); color: var(--blanco); cursor: pointer; display: grid; place-items: center; transition: background .2s; }
+  .carrusel__btn:hover { background: rgba(0,0,0,.75); }
+  .carrusel__btn--prev { left: 12px; } .carrusel__btn--next { right: 12px; }
+  .carrusel__btn svg { width: 20px; height: 20px; fill: currentColor; }
+  .carrusel__puntos { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+  .carrusel__puntos button { width: 10px; height: 10px; border-radius: 50%; border: 0; background: rgba(255,255,255,.4); cursor: pointer; transition: background .2s, transform .2s; }
+  .carrusel__puntos button.activo { background: var(--blanco); transform: scale(1.25); }
+
+  /* ---------- Equipo ---------- */
+  .equipo { padding: clamp(72px, 10vw, 120px) 0; background: #f2f2f2 url("assets/papel-blanco.jpg") center / cover; color: var(--negro); }
+  .equipo .titulo-seccion { text-align: center; font-size: clamp(48px, 9vw, 120px); }
+  .equipo__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 3vw, 36px); }
+  .persona { text-align: center; }
+  .persona__foto { aspect-ratio: 4 / 5; overflow: hidden; border-radius: 6px; background: #ddd; }
+  .persona__foto img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; filter: grayscale(1); transition: filter .4s, transform .5s; }
+  .persona:hover .persona__foto img { filter: grayscale(0); transform: scale(1.03); }
+  .persona h3 { margin-top: 16px; color: var(--rojo); font-size: 22px; font-weight: 900; }
+  .persona p { font-weight: 500; }
+  .persona a { display: inline-block; margin-top: 4px; color: var(--rojo); font-weight: 700; text-decoration: none; }
+  .persona a:hover { text-decoration: underline; }
+
+  /* ---------- Contacto ---------- */
+  .contacto { position: relative; padding: clamp(72px, 10vw, 140px) 0; background: url("assets/contacto.jpg") right center / cover; }
+  .contacto::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.75) 55%, rgba(0,0,0,.25) 100%); }
+  .contacto .contenedor { position: relative; }
+  .form { max-width: 520px; display: grid; gap: 14px; }
+  .form label { font-size: 14px; font-weight: 700; display: grid; gap: 6px; }
+  .form input, .form textarea {
+    width: 100%; padding: 14px 16px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.08);
+    color: var(--blanco); font: inherit; font-size: 16px;
+  }
+  .form input::placeholder, .form textarea::placeholder { color: rgba(255,255,255,.55); }
+  .form input:focus, .form textarea:focus { outline: 2px solid var(--rojo); outline-offset: 1px; border-color: transparent; }
+  .form textarea { min-height: 140px; resize: vertical; }
+  .form button { justify-self: start; margin-top: 6px; background: var(--rojo); border: 0; color: var(--blanco); padding: 14px 36px; border-radius: 999px; font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; transition: background .2s; }
+  .form button:hover { background: var(--rojo-oscuro); }
+  .form__aviso { font-size: 14px; color: var(--texto-suave); min-height: 1.2em; }
+
+  /* ---------- Footer ---------- */
+  .footer { background: #000; padding: 32px 0 calc(32px + env(safe-area-inset-bottom)); }
+  .footer .contenedor { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; }
+  .footer img { width: 54px; }
+  .footer__datos { text-align: right; font-size: 15px; line-height: 1.7; }
+  .footer__datos a { text-decoration: none; }
+  .footer__datos a:hover { color: var(--rojo); }
+  .footer__marca { font-weight: 700; }
+  .footer__marca span { font-weight: 400; color: var(--texto-suave); margin-left: 6px; }
+
+  /* ---------- WhatsApp ---------- */
+  .whatsapp { position: fixed; right: 20px; bottom: 20px; z-index: 40; width: 56px; height: 56px; border-radius: 50%; background: #25d366; display: grid; place-items: center; box-shadow: 0 6px 20px rgba(0,0,0,.4); transition: transform .2s; }
+  .whatsapp:hover { transform: scale(1.08); }
+  .whatsapp svg { width: 30px; height: 30px; fill: #fff; }
+
+  /* ---------- Modal de video ---------- */
+  .modal { position: fixed; inset: 0; z-index: 100; display: none; place-items: center; background: rgba(0,0,0,.9); padding: 16px; }
+  .modal.abierto { display: grid; }
+  .modal__caja { width: min(1100px, 100%); }
+  .modal__video { position: relative; aspect-ratio: 16 / 9; }
+  .modal__video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: 6px; }
+  .modal__titulo { margin-top: 14px; font-weight: 700; text-transform: uppercase; }
+  .modal__cerrar { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,.12); color: #fff; font-size: 26px; cursor: pointer; }
+  .modal__cerrar:hover { background: rgba(255,255,255,.25); }
+
+  /* ---------- Animación de entrada ---------- */
+  .aparecer { opacity: 0; transform: translateY(24px); transition: opacity .8s, transform .8s; }
+  .aparecer.visible { opacity: 1; transform: none; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .menu-btn { display: block; }
+    .nav {
+      position: fixed; inset: var(--header-h) 0 auto 0;
+      flex-direction: column; gap: 0; padding: 8px 16px 20px;
+      background: rgba(11,10,11,.97);
+      transform: translateY(-120%); transition: transform .35s;
+    }
+    .nav a { padding: 14px 4px; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .header.menu-abierto .nav { transform: none; }
+    .header.menu-abierto .menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .header.menu-abierto .menu-btn span:nth-child(2) { opacity: 0; }
+    .header.menu-abierto .menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .header .redes { display: none; }
+    .areas__grid { grid-template-columns: 1fr; }
+    .equipo__grid { grid-template-columns: 1fr; max-width: 380px; margin-inline: auto; }
+    .footer .contenedor { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+    .footer__datos { text-align: center; }
+    .footer { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+    .carrusel__btn { display: none; }
+    .carrusel__slide { aspect-ratio: 4 / 3; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .aparecer { opacity: 1; transform: none; transition: none; }
+    .hero__flecha { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header" id="header">
+  <a class="header__logo" href="#inicio" aria-label="Pardo Studio, inicio"><img src="assets/logo.png" alt="Logo de Pardo Studio"></a>
+  <nav class="nav" id="nav" aria-label="Principal">
+    <a href="#inicio">Inicio</a>
+    <a href="#areas">Áreas</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#equipo">Equipo</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+  <div class="redes">
+    <a href="https://www.instagram.com/pardostudio.ok/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.2.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.2.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2M12 0C8.7 0 8.3 0 7.1.1 5.8.1 4.9.3 4.1.6c-.8.3-1.5.7-2.1 1.4C1.3 2.6.9 3.3.6 4.1.3 4.9.1 5.8.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.1 1.3.3 2.2.6 2.9.3.8.7 1.5 1.4 2.1.7.7 1.3 1.1 2.1 1.4.8.3 1.6.5 2.9.6 1.2.1 1.6.1 4.9.1s3.7 0 4.9-.1c1.3-.1 2.2-.3 2.9-.6.8-.3 1.5-.7 2.1-1.4.7-.7 1.1-1.3 1.4-2.1.3-.8.5-1.6.6-2.9.1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.1-1.3-.3-2.2-.6-2.9-.3-.8-.7-1.5-1.4-2.1C21.4 1.3 20.7.9 19.9.6 19.1.3 18.2.1 16.9.1 15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9z"/></svg></a>
+    <a href="https://www.linkedin.com/company/pardo-studiook/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.5H3.6V9h3.5v11.5zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0z"/></svg></a>
+    <a href="https://www.youtube.com/@PARDOSTUDIO" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+  </div>
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+</header>
+
+<main>
+  <!-- Inicio -->
+  <section class="hero" id="inicio">
+    <img class="hero__poster" src="assets/hero-poster.jpg" alt="">
+    <video autoplay muted loop playsinline preload="metadata" poster="assets/hero-poster.jpg">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero__contenido">
+      <h1>PARDO</h1>
+      <p>Creatividad visual para tu historia</p>
+      <a class="boton" href="#areas">Conocé todo lo que podemos hacer por tu marca</a>
+    </div>
+    <svg class="hero__flecha" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  </section>
+
+  <!-- Áreas -->
+  <section class="areas" id="areas">
+    <div class="contenedor areas__grid">
+      <div class="area aparecer">
+        <h2>CONTENT<span>STUDIO</span></h2>
+        <p>Dirección creativa, estrategia, planificación y producción de contenido.</p>
+      </div>
+      <div class="area aparecer">
+        <h2>POST PRODUCTION<span>STUDIO</span></h2>
+        <p>VFX, color grading, compositing, animación 2D y 3D.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="portfolio" id="portfolio">
+    <div class="contenedor">
+      <h2 class="titulo-seccion aparecer">Portfolio</h2>
+      <div class="filtros" id="filtros" role="group" aria-label="Filtrar proyectos"></div>
+      <div class="grilla" id="grilla"></div>
+      <button class="boton cargar-mas" id="cargar-mas">Cargar más</button>
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section class="servicios" id="servicios">
+    <div class="contenedor">
+      <h2 class="titulo-seccion aparecer">Servicios</h2>
+      <div class="carrusel aparecer" id="carrusel">
+        <div class="carrusel__pista">
+          <div class="carrusel__slide"><img src="assets/servicio-3.jpg" alt="Estrategia y Creatividad: desarrollamos ideas pensadas para que tu marca destaque"></div>
+          <div class="carrusel__slide"><img src="assets/servicio-2.jpg" alt="Post producción: construimos la narrativa visual que potencia campañas y el contenido de tu marca" loading="lazy"></div>
+          <div class="carrusel__slide"><img src="assets/servicio-4.jpg" alt="Contenido: planificamos y producimos contenido para comunicar tu marca con valor y coherencia" loading="lazy"></div>
+        </div>
+        <button class="carrusel__btn carrusel__btn--prev" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+        <button class="carrusel__btn carrusel__btn--next" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+      </div>
+      <div class="carrusel__puntos" id="puntos"></div>
+    </div>
+  </section>
+
+  <!-- Equipo -->
+  <section class="equipo" id="equipo">
+    <div class="contenedor">
+      <h2 class="titulo-seccion aparecer">Nuestro Equipo</h2>
+      <div class="equipo__grid">
+        <article class="persona aparecer">
+          <div class="persona__foto"><img src="assets/luke.jpg" alt="Luke Gumba" loading="lazy"></div>
+          <h3>Luke Gumba</h3>
+          <p>Director Creativo</p>
+          <a href="https://www.instagram.com/lukegumba.ad/" target="_blank" rel="noopener">@lukegumba.ad</a>
+        </article>
+        <article class="persona aparecer">
+          <div class="persona__foto"><img src="assets/flor.jpg" alt="Florencia Rivero" loading="lazy"></div>
+          <h3>Florencia Rivero</h3>
+          <p>Jefa de cuentas</p>
+          <a href="https://www.instagram.com/florencia.rivero__/" target="_blank" rel="noopener">@florencia.rivero__</a>
+        </article>
+        <article class="persona aparecer">
+          <div class="persona__foto"><img src="assets/ema.jpg" alt="Emanuel Abregu" loading="lazy"></div>
+          <h3>Emanuel Abregu</h3>
+          <p>Jefe de Post producción</p>
+          <a href="https://www.instagram.com/ema_abregu/" target="_blank" rel="noopener">@ema_abregu</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section class="contacto" id="contacto">
+    <div class="contenedor">
+      <h2 class="titulo-seccion aparecer">Trabajemos Juntos</h2>
+      <form class="form aparecer" id="form" novalidate>
+        <label>Nombre<input type="text" name="nombre" placeholder="Tu nombre" required autocomplete="name"></label>
+        <label>Email<input type="email" name="email" placeholder="tu@email.com" required autocomplete="email"></label>
+        <label>Tu mensaje<textarea name="mensaje" placeholder="Contanos sobre tu proyecto" required></textarea></label>
+        <button type="submit">Enviar</button>
+        <p class="form__aviso" id="form-aviso" role="status"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="contenedor">
+    <p class="footer__marca">PARDO STUDIO S.A.S.<span>Argentina</span></p>
+    <img src="assets/logo.png" alt="" loading="lazy">
+    <div class="footer__datos">
+      <p>Tel: Luke: <a href="tel:+5493876186105">3876 18-6105</a></p>
+      <p>Email: <a href="mailto:pardoconsultas@gmail.com">pardoconsultas@gmail.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/5493876186105?text=Hola%20Pardo%20Studio!%20Quiero%20consultar%20por%20un%20proyecto" target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8zm8.4-18.2A11.8 11.8 0 0 0 1.8 17.8L.1 24l6.4-1.7A11.8 11.8 0 0 0 24 12a11.7 11.7 0 0 0-3.6-8.4z"/></svg>
+</a>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Reproductor de video">
+  <button class="modal__cerrar" id="modal-cerrar" aria-label="Cerrar">&times;</button>
+  <div class="modal__caja">
+    <div class="modal__video" id="modal-video"></div>
+    <p class="modal__titulo" id="modal-titulo"></p>
+  </div>
+</div>
+
+<script>
+  /* Los proyectos del portfolio están en data/proyectos.json.
+     Ese archivo es el que se actualiza cuando subís un video nuevo a YouTube. */
+  let PROYECTOS = [];
+
+  const POR_PAGINA = 12;
+  let filtroActivo = "Todos";
+  let mostrados = POR_PAGINA;
+
+  const grilla = document.getElementById("grilla");
+  const btnMas = document.getElementById("cargar-mas");
+  const filtros = document.getElementById("filtros");
+
+  const iconoPlay = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="31" fill="rgba(196,22,28,.9)"/><path d="M26 20l18 12-18 12z" fill="#fff"/></svg>';
+
+  function lista() {
+    return filtroActivo === "Todos" ? PROYECTOS : PROYECTOS.filter(p => p.area === filtroActivo);
+  }
+
+  function pintarFiltros() {
+    const areas = ["Todos", ...new Set(PROYECTOS.map(p => p.area))];
+    filtros.innerHTML = areas.map(a =>
+      `<button class="filtro${a === filtroActivo ? " activo" : ""}" data-area="${a}" aria-pressed="${a === filtroActivo}">${a}</button>`
+    ).join("");
+  }
+
+  function pintarGrilla() {
+    const items = lista();
+    grilla.innerHTML = items.slice(0, mostrados).map(p => `
+      <button class="video-card" data-id="${p.id}" data-titulo="${p.titulo}">
+        <div class="video-card__img">
+          <img src="https://i.ytimg.com/vi/${p.id}/hqdefault.jpg" alt="" loading="lazy"
+               onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${p.id}/mqdefault.jpg'">
+          <span class="video-card__play">${iconoPlay}</span>
+          ${p.duracion ? `<span class="video-card__duracion">${p.duracion}</span>` : ""}
+        </div>
+        <p class="video-card__titulo">${p.titulo}</p>
+        <p class="video-card__cliente">${p.cliente}</p>
+      </button>`).join("");
+    btnMas.hidden = mostrados >= items.length;
+  }
+
+  filtros.addEventListener("click", e => {
+    const b = e.target.closest(".filtro");
+    if (!b) return;
+    filtroActivo = b.dataset.area;
+    mostrados = POR_PAGINA;
+    pintarFiltros();
+    pintarGrilla();
+  });
+  btnMas.addEventListener("click", () => { mostrados += POR_PAGINA; pintarGrilla(); });
+
+  // Modal de video
+  const modal = document.getElementById("modal");
+  const modalVideo = document.getElementById("modal-video");
+  const modalTitulo = document.getElementById("modal-titulo");
+  grilla.addEventListener("click", e => {
+    const c = e.target.closest(".video-card");
+    if (!c) return;
+    modalVideo.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${c.dataset.id}?autoplay=1&rel=0" title="${c.dataset.titulo}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+    modalTitulo.textContent = c.dataset.titulo;
+    modal.classList.add("abierto");
+    document.body.style.overflow = "hidden";
+  });
+  function cerrarModal() {
+    modal.classList.remove("abierto");
+    modalVideo.innerHTML = "";
+    document.body.style.overflow = "";
+  }
+  document.getElementById("modal-cerrar").addEventListener("click", cerrarModal);
+  modal.addEventListener("click", e => { if (e.target === modal) cerrarModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.classList.contains("abierto")) cerrarModal(); });
+
+  fetch("data/proyectos.json")
+    .then(r => r.json())
+    .then(lista => { PROYECTOS = lista; pintarFiltros(); pintarGrilla(); })
+    .catch(() => { grilla.innerHTML = '<p>No se pudieron cargar los proyectos. <a href="https://www.youtube.com/@PARDOSTUDIO">Miralos en YouTube</a>.</p>'; });
+
+  // Carrusel de servicios
+  (() => {
+    const pista = document.querySelector(".carrusel__pista");
+    const slides = pista.children.length;
+    const puntos = document.getElementById("puntos");
+    let i = 0, timer;
+    puntos.innerHTML = [...Array(slides)].map((_, n) => `<button aria-label="Ir al servicio ${n + 1}"></button>`).join("");
+    function ir(n) {
+      i = (n + slides) % slides;
+      pista.style.transform = `translateX(-${i * 100}%)`;
+      [...puntos.children].forEach((p, k) => p.classList.toggle("activo", k === i));
+    }
+    function auto() { clearInterval(timer); timer = setInterval(() => ir(i + 1), 5000); }
+    document.querySelector(".carrusel__btn--prev").onclick = () => { ir(i - 1); auto(); };
+    document.querySelector(".carrusel__btn--next").onclick = () => { ir(i + 1); auto(); };
+    puntos.onclick = e => { const k = [...puntos.children].indexOf(e.target); if (k >= 0) { ir(k); auto(); } };
+    let x0 = null;
+    pista.addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true });
+    pista.addEventListener("touchend", e => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 40) { ir(i + (d < 0 ? 1 : -1)); auto(); } x0 = null; });
+    ir(0); auto();
+  })();
+
+  // Menú en celular
+  const header = document.getElementById("header");
+  const menuBtn = document.getElementById("menu-btn");
+  menuBtn.addEventListener("click", () => {
+    const abierto = header.classList.toggle("menu-abierto");
+    menuBtn.setAttribute("aria-expanded", abierto);
+  });
+  document.querySelectorAll(".nav a").forEach(a => a.addEventListener("click", () => {
+    header.classList.remove("menu-abierto");
+    menuBtn.setAttribute("aria-expanded", "false");
+  }));
+  addEventListener("scroll", () => header.classList.toggle("con-fondo", scrollY > 40), { passive: true });
+
+  // Animaciones al aparecer
+  const obs = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+  }), { threshold: .15 });
+  document.querySelectorAll(".aparecer").forEach(el => obs.observe(el));
+
+  // Formulario (en la versión final se conecta a un servicio gratuito que te envía el mensaje por mail)
+  document.getElementById("form").addEventListener("submit", e => {
+    e.preventDefault();
+    const f = e.target, aviso = document.getElementById("form-aviso");
+    if (!f.checkValidity()) { aviso.textContent = "Completá tu nombre, un email válido y tu mensaje."; return; }
+    aviso.textContent = "Vista previa: en la versión final este mensaje te llega a pardoconsultas@gmail.com.";
+  });
+</script>
+</body>
+</html>
