@@ -26,8 +26,8 @@ Sumar una línea en `data/proyectos.json`:
 - `area`: crea el filtro automáticamente (Campañas, Publicidad, Institucional, Música, Reels…).
 - `duracion` es opcional.
 
-## Pendiente antes de publicar en pardostudio.com.ar
+## Dominio
 
-- Quitar `<meta name="robots" content="noindex">` de `index.html` (está para que Google no indexe la versión de prueba).
-- Conectar el formulario de contacto a Web3Forms.
-- Configurar el dominio propio en GitHub Pages y en NIC Argentina.
+- `pardostudio.com.ar` está registrado en NIC Argentina (vence el 19/02/2027) y delegado a Cloudflare (DNS).
+- En Cloudflare: 4 registros A a GitHub Pages (185.199.108-111.153) y `www` como CNAME a `pardostudiook.github.io`, sin proxy.
+- El archivo `CNAME` de este repositorio le indica a GitHub Pages el dominio.
