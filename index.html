@@ -98,6 +98,7 @@
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.45) 60%, var(--negro) 100%); }
   .hero__contenido { position: relative; z-index: 1; padding: 0 16px; }
   .hero h1 { font-size: clamp(64px, 16vw, 210px); font-weight: 900; letter-spacing: -.02em; line-height: .9; }
+  .hero__logo img { width: clamp(180px, 26vw, 340px); height: auto; margin: 0 auto; }
   .hero p { font-size: clamp(18px, 2.4vw, 28px); margin-top: 12px; font-weight: 500; }
   .boton {
     display: inline-block; margin-top: 32px; padding: 14px 30px;
@@ -312,7 +313,7 @@
       <source src="assets/hero.mp4" type="video/mp4">
     </video>
     <div class="hero__contenido">
-      <h1>PARDO<span class="solo-lectores"> Studio, productora audiovisual en Salta</span></h1>
+      <h1 class="hero__logo"><img src="assets/logo-pardo-vertical.png" alt="Pardo" width="798" height="630"><span class="solo-lectores"> Studio, productora audiovisual en Salta</span></h1>
       <p>Creatividad visual para tu historia</p>
       <a class="boton" href="#areas">Conocé todo lo que podemos hacer por tu marca</a>
     </div>
