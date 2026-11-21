@@ -4,128 +4,147 @@
     "titulo": "Integral – 24 años de trayectoria",
     "cliente": "Integral",
     "area": "Institucional",
-    "duracion": "01:15"
+    "duracion": "01:15",
+    "fecha": "2026-11-21"
   },
   {
     "id": "9dStpffwCMQ",
     "titulo": "Semana del Cine en Salta 2026 – Set de filmación en vivo",
     "cliente": "Semana del Cine en Salta",
     "area": "Contenido",
-    "duracion": "00:57"
+    "duracion": "00:57",
+    "fecha": "2026-11-21"
   },
   {
     "id": "LLFexyl1VpQ",
     "titulo": "Ahyre – Faro",
     "cliente": "Ahyre",
     "area": "Videoclips",
-    "duracion": "00:44"
+    "duracion": "00:44",
+    "fecha": "2026-11-21"
   },
   {
     "id": "xzpmV3h42QQ",
     "titulo": "Semana Salta",
     "cliente": "Turismo de Salta",
     "area": "Publicidad",
-    "duracion": "01:00"
+    "duracion": "01:00",
+    "fecha": "2026-02-21"
   },
   {
     "id": "BETQJpgbUXI",
     "titulo": "RIU Mauritius Ads",
     "cliente": "RIU Hotels",
     "area": "Publicidad",
-    "duracion": "02:10"
+    "duracion": "02:10",
+    "fecha": "2025-01-02"
   },
   {
     "id": "XBoUM5Kb_bs",
     "titulo": "Jujuy Magia Pura – Campaña 2025",
     "cliente": "Cultura y Turismo de Jujuy",
     "area": "Publicidad",
-    "duracion": "01:03"
+    "duracion": "01:03",
+    "fecha": "2024-12-18"
   },
   {
     "id": "hZ4WMVJeUT8",
     "titulo": "Medicenter App Ads",
     "cliente": "Medicenter",
     "area": "Publicidad",
-    "duracion": "02:01"
+    "duracion": "02:01",
+    "fecha": "2026-02-20"
   },
   {
     "id": "1XkdD2NYHgY",
     "titulo": "ERGY™ Latinoamérica Institucional",
     "cliente": "ERGY™",
     "area": "Institucional",
-    "duracion": "06:38"
+    "duracion": "06:38",
+    "fecha": "2025-01-02"
   },
   {
     "id": "sWL2snd4p_8",
     "titulo": "Casino Boulevard Nueva Sucursal",
     "cliente": "Casino Boulevard",
     "area": "Publicidad",
-    "duracion": "00:28"
+    "duracion": "00:28",
+    "fecha": "2026-02-17"
   },
   {
     "id": "CU6nzkdO4PU",
     "titulo": "LUVA – Medusas",
     "cliente": "LUVA",
     "area": "Videoclips",
-    "duracion": "04:45"
+    "duracion": "04:45",
+    "fecha": "2024-09-16"
   },
   {
     "id": "16ay3aPuAGs",
     "titulo": "Sería increíble en Salta",
     "cliente": "Turismo de Salta",
     "area": "Publicidad",
-    "duracion": "00:56"
+    "duracion": "00:56",
+    "fecha": "2026-02-18"
   },
   {
     "id": "OJOSQrKvAwU",
     "titulo": "Orellana Lucca feat. Chaqueño Palavecino Show",
     "cliente": "Orellana Lucca",
     "area": "Contenido",
-    "duracion": "08:05"
+    "duracion": "08:05",
+    "fecha": "2026-02-17"
   },
   {
     "id": "PLKzG2O9IwY",
     "titulo": "Anuario de Cultura de Salta",
     "cliente": "Cultura de Salta",
     "area": "Institucional",
-    "duracion": "02:10"
+    "duracion": "02:10",
+    "fecha": "2026-02-17"
   },
   {
     "id": "rnwh_7ACvJA",
     "titulo": "Experiencia Pink Floyd – The Great Gig Show en vivo",
     "cliente": "The Great Gig Show",
     "area": "Contenido",
-    "duracion": "05:25"
+    "duracion": "05:25",
+    "fecha": "2026-02-17"
   },
   {
     "id": "nli2zJiN_EU",
     "titulo": "Viví la experiencia Boulevard",
     "cliente": "Casino Boulevard",
     "area": "Publicidad",
-    "duracion": "00:31"
+    "duracion": "00:31",
+    "fecha": "2024-09-16"
   },
   {
     "id": "OHGrc4WiLtM",
     "titulo": "Gili – Infinitos Yo",
     "cliente": "Gili",
-    "area": "Videoclips"
+    "area": "Videoclips",
+    "fecha": "2026-02-17"
   },
   {
     "id": "OzC0JqRzrX4",
     "titulo": "COSALTA Institucional",
     "cliente": "COSALTA",
-    "area": "Institucional"
+    "area": "Institucional",
+    "fecha": "2026-02-17"
   },
   {
     "id": "VWvwRnqqhGc",
     "titulo": "Fondo Ciudadano Institucional",
     "cliente": "Fondo Ciudadano",
-    "area": "Institucional"
+    "area": "Institucional",
+    "fecha": "2026-02-17"
   },
   {
     "id": "HvF2nyU7_eM",
     "titulo": "Norte Rock",
     "cliente": "Norte Rock",
-    "area": "Contenido"
+    "area": "Contenido",
+    "fecha": "2024-09-24"
   }
 ]
