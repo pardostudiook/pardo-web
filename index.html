@@ -192,6 +192,9 @@
   .persona__foto { position: relative; width: min(84%, 300px); aspect-ratio: 1; margin: 10px auto 0; border-radius: 50%; overflow: hidden; border: 6px solid #fff; outline: 3px solid var(--rojo); outline-offset: 4px; background: var(--negro) url("assets/papel-negro.jpg") center / cover; box-shadow: 0 10px 24px rgba(0,0,0,.18); display: flex; align-items: flex-end; justify-content: center; }
   .persona__foto img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; filter: grayscale(1); }
   .persona--sin-foto .persona__foto svg { width: 70%; height: auto; fill: rgba(255,255,255,.16); }
+  /* Entrada de a uno cuando la sección aparece en pantalla */
+  .equipo__pista .persona { opacity: 0; transform: translateY(40px) scale(.9); transition: opacity .9s ease, transform 1s cubic-bezier(.2,.8,.2,1); transition-delay: calc(var(--n, 0) * 380ms); }
+  .equipo__carrusel.entro .persona { opacity: 1; transform: none; }
   .persona h3 { position: relative; display: inline-block; margin-top: -16px; padding: 4px 14px; background: var(--rojo); color: #fff; font-size: clamp(13px, 1.7vw, 22px); font-weight: 900; }
   .persona p { margin-top: 6px; font-weight: 500; font-size: clamp(12px, 1.3vw, 16px); }
   .persona a { display: inline-block; margin-top: 2px; color: var(--rojo); font-weight: 700; text-decoration: none; font-size: clamp(12px, 1.3vw, 16px); }
@@ -309,6 +312,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .aparecer { opacity: 1; transform: none; transition: none; }
+    .equipo__pista .persona { opacity: 1; transform: none; transition: none; }
     .hero__flecha { animation: none; }
   }
 </style>
@@ -686,8 +690,8 @@
     .then(r => r.json())
     .then(gente => {
       // Sin foto todavía: se muestra una silueta con el nombre y el rol
-      document.getElementById("equipo-grid").innerHTML = gente.map(p => `
-        <article class="persona${p.foto ? "" : " persona--sin-foto"}">
+      document.getElementById("equipo-grid").innerHTML = gente.map((p, n) => `
+        <article class="persona${p.foto ? "" : " persona--sin-foto"}" style="--n:${Math.min(n, 3)}">
           <div class="persona__foto">${p.foto ? `<img src="${p.foto}" alt="${p.nombre}" loading="lazy">` : siluetaSvg}</div>
           <h3>${p.nombre}</h3>
           <p>${p.rol}</p>
@@ -708,7 +712,9 @@
       i = n > max ? 0 : n < 0 ? max : n;
       pista.style.transform = `translateX(-${i * (100 / visibles())}%)`;
     }
-    function auto() { clearInterval(timer); timer = setInterval(() => ir(i + 1), 3500); }
+    // Pasa cada 6 segundos, pero solo mientras la sección está a la vista.
+    let aLaVista = false;
+    function auto() { clearInterval(timer); if (aLaVista) timer = setInterval(() => ir(i + 1), 6000); }
     document.querySelectorAll(".eq-flecha").forEach(b => b.onclick = () => { ir(i + Number(b.dataset.dir)); auto(); });
     caja.addEventListener("mouseenter", () => clearInterval(timer));
     caja.addEventListener("mouseleave", auto);
@@ -716,7 +722,19 @@
     caja.addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true });
     caja.addEventListener("touchend", e => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 40) { ir(i + (d < 0 ? 1 : -1)); auto(); } x0 = null; });
     addEventListener("resize", () => ir(i));
-    ir(0); auto();
+    ir(0);
+    // Cuando la sección aparece por primera vez, las fotos entran de a una y recién después arranca el carrusel.
+    let primeraVez = true;
+    new IntersectionObserver(([e]) => {
+      aLaVista = e.isIntersecting;
+      if (!aLaVista) { clearInterval(timer); return; }
+      if (primeraVez) {
+        primeraVez = false;
+        caja.classList.add("entro");
+        clearInterval(timer);
+        setTimeout(() => { pista.querySelectorAll(".persona").forEach(el => el.style.transitionDelay = "0s"); auto(); }, visibles() * 380 + 1100);
+      } else auto();
+    }, { threshold: 0.35 }).observe(caja);
   }
 
   // Carrusel de servicios
