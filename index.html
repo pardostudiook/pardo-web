@@ -655,8 +655,11 @@
             <button class="ig-card__sonido" aria-label="Activar sonido">${iconoMudo}</button>
           </div>
         </article>`).join("");
-      // Carga escalonada: se baja un video por vez, en orden. Cuando está listo, la
-      // tarjeta aparece (fundido) y recién ahí empieza a bajar el siguiente.
+      // Carga por adelantado: apenas termina de cargar la página, se empiezan a bajar
+      // los primeros videos (de a uno, en orden) aunque el visitante todavía no haya
+      // llegado a esta sección. El resto sigue bajando cuando la sección se acerca.
+      // Las tarjetas aparecen escalonadas (fundido) cuando el visitante llega.
+      const ADELANTADOS = 6;
       const tarjetas = [...igPista.querySelectorAll(".ig-card")];
       const enVista = new Set();
       const vista = new IntersectionObserver(es => es.forEach(e => {
@@ -665,29 +668,53 @@
         else { enVista.delete(v); v.pause(); }
       }), { threshold: .5 });
       tarjetas.forEach(t => vista.observe(t.querySelector("video")));
-      let siguiente = 0;
-      const cargarSiguiente = () => {
-        const t = tarjetas[siguiente++];
-        if (!t) return;
+
+      // Aparición escalonada: solo cuando la sección está a la vista
+      let seccionVisible = false;
+      const porMostrar = [];
+      let mostrando = false;
+      const mostrarProxima = () => {
+        const t = porMostrar.shift();
+        if (!t) { mostrando = false; return; }
+        mostrando = true;
+        t.classList.add("listo");
         const v = t.querySelector("video");
+        if (enVista.has(v)) v.play().catch(() => {});
+        setTimeout(mostrarProxima, 180);
+      };
+      const encolar = t => { porMostrar.push(t); if (!mostrando) mostrarProxima(); };
+      const listas = new Set();
+      const marcarLista = t => { listas.add(t); if (seccionVisible) encolar(t); };
+
+      // Descarga en fila, un video por vez
+      let siguiente = 0, permitido = ADELANTADOS, bajando = false;
+      const cargarSiguiente = () => {
+        if (siguiente >= tarjetas.length || siguiente >= permitido) { bajando = false; return; }
+        bajando = true;
+        const t = tarjetas[siguiente++], v = t.querySelector("video");
         let hecho = false;
-        const mostrar = () => {
-          if (hecho) return; hecho = true;
-          t.classList.add("listo");
-          if (enVista.has(v)) v.play().catch(() => {});
-          setTimeout(cargarSiguiente, 250);
-        };
-        v.addEventListener("canplay", mostrar, { once: true });
-        v.addEventListener("error", mostrar, { once: true });
-        setTimeout(mostrar, 9000); // si un video tarda demasiado, aparece con su portada y se sigue con el próximo
+        const fin = () => { if (hecho) return; hecho = true; marcarLista(t); cargarSiguiente(); };
+        v.addEventListener("canplaythrough", fin, { once: true });
+        v.addEventListener("error", fin, { once: true });
+        setTimeout(fin, 12000);
         v.preload = "auto";
         v.load();
       };
-      // Arranca cuando la sección se está acercando (un poco antes de verse)
-      const acercando = new IntersectionObserver(es => {
-        if (es.some(e => e.isIntersecting)) { acercando.disconnect(); cargarSiguiente(); }
-      }, { rootMargin: "600px 0px" });
-      acercando.observe(igPista);
+      const arrancarPrecarga = () => setTimeout(() => { if (!bajando) cargarSiguiente(); }, 1500);
+      if (document.readyState === "complete") arrancarPrecarga(); else addEventListener("load", arrancarPrecarga);
+
+      // Cuando la sección se acerca: habilita bajar todos; cuando se ve, muestra lo que ya está listo
+      new IntersectionObserver((es, o) => {
+        if (es.some(e => e.isIntersecting)) { o.disconnect(); permitido = tarjetas.length; if (!bajando) cargarSiguiente(); }
+      }, { rootMargin: "800px 0px" }).observe(igPista);
+      new IntersectionObserver((es, o) => {
+        if (es.some(e => e.isIntersecting)) {
+          o.disconnect(); seccionVisible = true;
+          tarjetas.filter(t => listas.has(t)).forEach(encolar);
+          // las que no estén listas a los 9 s aparecen con su portada igual
+          setTimeout(() => tarjetas.filter(t => !listas.has(t) && !t.classList.contains("listo")).forEach(t => { listas.add(t); encolar(t); }), 9000);
+        }
+      }, { threshold: .15 }).observe(igPista);
       // Tocar el video o el parlante activa/desactiva el sonido (solo uno con sonido a la vez)
       igPista.addEventListener("click", e => {
         const marco = e.target.closest(".ig-card__marco");
