@@ -161,15 +161,14 @@ const Gancho = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   // Tomas verticales de clientes (archivo, segundo, cuadros). Sin subtítulos encima.
-  // Abre y cierra con la chica caminando entre las plantas de Prisamata.
+  // Prisamata (chica del sombrero) solo en dos planos: abre caminando y cierra en primer plano.
   const cortes = [
-    ['prisamata-05', 17.0, 18],
-    ['boulevard-reel-1', 8.0, 13],
-    ['prisamata-05', 9.6, 13],
-    ['riica-almora-03', 22.5, 13],
-    ['boulevard-reel-4', 2.0, 13],
-    ['prisamata-05', 11.4, 13],
-    ['prisamata-05', 19.4, 60],
+    ['prisamata-05', 17.0, 22],     // caminando entre las plantas
+    ['boulevard-reel-2', 0.1, 18],  // Casino Boulevard: lanza la ficha
+    ['videocaso-01', 1.5, 15],      // Agéntica: dron sobre el edificio
+    ['videocaso-01', 5.0, 14],      // Agéntica: Camila sentada (antes del cartel con su nombre)
+    ['riica-almora-03', 22.5, 13],  // RIICA: caminando en el campo
+    ['prisamata-05', 9.6, 60],      // primer plano con sombrero, detrás del título
   ];
   const inicios = cortes.reduce((acc, c, i) => [...acc, i === 0 ? 0 : acc[i - 1] + cortes[i - 1][2]], []);
   const s = spring({ frame: f - 22, fps, config: { damping: 14, mass: 0.7 } });
@@ -290,7 +289,7 @@ const Portfolio = () => {
 };
 
 // 5. Contenido para marcas: carrusel de reels de clientes.
-const REELS = ['boulevard-reel-1', 'riica-algaria-03', 'prisamata-11', 'pardo-alcance', 'prisamata-05', 'riica-almora-02', 'boulevard-reel-3'];
+const REELS = ['boulevard-reel-1', 'riica-algaria-03', 'prisamata-11', 'pardo-alcance', 'prisamata-01', 'riica-almora-02', 'boulevard-reel-3'];
 const Redes = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
