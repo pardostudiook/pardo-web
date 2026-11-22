@@ -78,25 +78,31 @@ const Titular = ({ children, size = 150, style }) => (
   }}>{children}</div>
 );
 
-// Plano del showreel de portada (horizontal) recortado a vertical.
-const Plano = ({ segundo, lento = true }) => {
+// Plano del showreel original de Wix (1600x1080) dentro de una franja.
+// La franja mide FRANJA_ALTO de alto, así el video se agranda solo ~1,1 veces
+// en vez de 1,8 veces que haría falta para llenar toda la pantalla vertical.
+const FRANJA_ALTO = 1200;
+const Plano = ({ segundo, top = 360, alto = FRANJA_ALTO }) => {
   const f = useCurrentFrame();
-  const z = lento ? 1 + f * 0.0025 : 1;
+  const z = 1 + f * 0.0012;
+  const anchoVideo = Math.round(alto * (1600 / 1080));
   return (
-    <AbsoluteFill style={{ overflow: 'hidden', backgroundColor: NEGRO }}>
+    <div style={{ position: 'absolute', left: 0, right: 0, top, height: alto, overflow: 'hidden', backgroundColor: NEGRO }}>
       <OffthreadVideo
-        src={staticFile('hero-desktop.mp4')}
+        src={staticFile('hero-alta.mp4')}
         startFrom={Math.round(segundo * 30)}
         muted
-        style={{ width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${z})` }}
+        style={{ position: 'absolute', top: 0, left: (1080 - anchoVideo) / 2, width: anchoVideo, height: alto, transform: `scale(${z})` }}
       />
-    </AbsoluteFill>
+    </div>
   );
 };
 
-const Degradado = ({ arriba = 0.55, abajo = 0.75 }) => (
-  <AbsoluteFill style={{
-    background: `linear-gradient(180deg, rgba(0,0,0,${arriba}) 0%, rgba(0,0,0,0) 38%, rgba(0,0,0,0) 55%, rgba(0,0,0,${abajo}) 100%)`,
+// Bordes de la franja que se funden con el papel.
+const FundidoFranja = ({ top, alto = FRANJA_ALTO, fuerza = 0.9 }) => (
+  <div style={{
+    position: 'absolute', left: 0, right: 0, top, height: alto,
+    background: `linear-gradient(180deg, rgba(11,10,11,${fuerza}) 0%, rgba(11,10,11,0) 14%, rgba(11,10,11,0) 70%, rgba(11,10,11,${fuerza}) 100%)`,
   }} />
 );
 
@@ -134,21 +140,24 @@ const URL_WEB = 'pardostudio.com.ar';
 const Gancho = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const cortes = [6, 9.2, 12.3, 15.2, 27.2, 30.3, 39.5, 36.2];
+  // Tomas del showreel (segundos): ojo, fuego, danza, sirena, Papá Noel, malambo, cantor, llamas.
+  const cortes = [0.4, 2.4, 18.4, 30.4, 32.4, 12.4, 28.4, 40.4];
   const largo = 13;
+  const top = 250;
   const s = spring({ frame: f - 22, fps, config: { damping: 14, mass: 0.7 } });
   return (
     <AbsoluteFill>
+      <Papel />
       {cortes.map((seg, i) => (
         <Sequence key={i} from={i * largo} durationInFrames={i === cortes.length - 1 ? 200 : largo}>
-          <Plano segundo={seg} />
+          <Plano segundo={seg} top={top} />
         </Sequence>
       ))}
-      <Degradado arriba={0.5} abajo={0.8} />
+      <FundidoFranja top={top} fuerza={0.95} />
       <PielPapel />
-      <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Img src={staticFile('logo.png')} style={{ width: 210, marginBottom: 40, opacity: tramo(f, 4, 14) }} />
-        <div style={{ transform: `scale(${0.6 + 0.4 * s})`, opacity: Math.min(1, s * 1.4), textAlign: 'center' }}>
+      <AbsoluteFill style={{ alignItems: 'center' }}>
+        <Img src={staticFile('logo.png')} style={{ position: 'absolute', top: 70, width: 150, opacity: tramo(f, 2, 12) }} />
+        <div style={{ position: 'absolute', top: 1300, transform: `scale(${0.6 + 0.4 * s})`, opacity: Math.min(1, s * 1.4), textAlign: 'center' }}>
           <Titular size={126}>Estrenamos</Titular>
           <Titular size={230} style={{ marginTop: 6 }}><Calado size={230}>web</Calado></Titular>
         </div>
@@ -210,18 +219,22 @@ const Servicios = () => {
 // 4. Portfolio: publicidad, institucional, videoclips — con los filtros de la web.
 const Portfolio = () => {
   const f = useCurrentFrame();
-  const cortes = [12.4, 21, 24.3, 42.2, 45, 33.2];
+  // Tomas del showreel: app de RIU, guitarrista, presentador, gastronomía, ciudad aérea, guitarra.
+  const cortes = [46.4, 22.4, 44.4, 8.4, 34.4, 26.4];
   const largo = 30;
+  const top = 600;
+  const alto = 1040;
   const filtros = ['Publicidad', 'Institucional', 'Contenido', 'Videoclips'];
   const activo = Math.min(filtros.length - 1, Math.floor(Math.max(0, f - 20) / 38));
   return (
     <AbsoluteFill>
+      <Papel />
       {cortes.map((seg, i) => (
         <Sequence key={i} from={i * largo} durationInFrames={largo}>
-          <Plano segundo={seg} />
+          <Plano segundo={seg} top={top} alto={alto} />
         </Sequence>
       ))}
-      <Degradado arriba={0.75} abajo={0.85} />
+      <FundidoFranja top={top} alto={alto} fuerza={0.6} />
       <PielPapel />
       <AbsoluteFill style={{ padding: '170px 70px 0' }}>
         <Sube desde={4}><Titular size={150} style={{ textTransform: 'none', letterSpacing: '-0.02em' }}>Portfolio</Titular></Sube>
@@ -237,7 +250,7 @@ const Portfolio = () => {
           ))}
         </div>
       </AbsoluteFill>
-      <AbsoluteFill style={{ justifyContent: 'flex-end', padding: '0 70px 230px' }}>
+      <AbsoluteFill style={{ justifyContent: 'flex-end', padding: '0 70px 100px' }}>
         <Sube desde={24}>
           <div style={{ fontFamily: FUENTE, fontWeight: 700, fontSize: 64, lineHeight: 1.12, color: BLANCO }}>
             Campañas, institucionales<br />y videoclips que hicimos.
