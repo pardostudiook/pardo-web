@@ -307,8 +307,9 @@ const Servicios = () => {
 // 4. Portfolio: publicidad, institucional, videoclips — con los filtros de la web.
 const Portfolio = () => {
   const f = useCurrentFrame();
-  // Tomas del showreel: app de RIU, guitarrista, atardecer, gastronomía, ciudad aérea, guitarra.
-  const cortes = [46.4, 22.4, 36.4, 8.4, 34.4, 26.4];
+  // Tomas del showreel: app de RIU, Medicenter, recital, RIU, sirena/yeti, llamas.
+  // Sin Satoshi Tango (42,5–44,5 s) ni Descoqueo (7,5 s y 35,5–38,5 s).
+  const cortes = [46.4, 22.4, 12.6, 8.4, 30.0, 40.0];
   const largo = 30;
   const top = 600;
   const alto = 1040;
