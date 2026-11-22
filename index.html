@@ -146,7 +146,22 @@
   .portfolio .contenedor { width: min(1440px, 100% - 32px); }
   .grilla { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px 16px; }
   @media (max-width: 1100px) { .grilla { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 600px) { .grilla { grid-template-columns: 1fr; gap: 28px; } }
+  /* Celular: bloques de 4 (2x2) que se deslizan de izquierda a derecha */
+  .pf-puntos { display: none; }
+  @media (max-width: 600px) {
+    .grilla { grid-template-columns: none; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-auto-columns: calc((100% - 12px) / 2); gap: 22px 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+    .grilla::-webkit-scrollbar { display: none; }
+    .grilla .video-card:nth-child(4n+1) { scroll-snap-align: start; scroll-snap-stop: always; }
+    .video-card__titulo { font-size: 12px; }
+    .video-card__cliente { font-size: 12px; }
+    .video-card__play svg { width: 44px; height: 44px; }
+    .video-card__duracion { font-size: 11px; right: 6px; bottom: 6px; }
+    .cargar-mas { display: none; }
+    .pf-puntos { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 26px; }
+    .pf-puntos[hidden] { display: none; }
+    .pf-puntos button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.35); cursor: pointer; transition: width .3s, background .3s; }
+    .pf-puntos button.activo { width: 26px; border-radius: 6px; background: var(--rojo); }
+  }
   .video-card { background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
   .video-card__img { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px; background: var(--gris); }
   .video-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s, filter .3s; }
@@ -390,6 +405,7 @@
       <h2 class="titulo-seccion aparecer">Portfolio</h2>
       <div class="filtros" id="filtros" role="group" aria-label="Filtrar proyectos"></div>
       <div class="grilla" id="grilla"></div>
+      <div class="pf-puntos" id="pf-puntos" role="group" aria-label="Páginas del portfolio"></div>
       <button class="boton cargar-mas" id="cargar-mas">Cargar más</button>
     </div>
   </section>
@@ -552,9 +568,33 @@
     ).join("");
   }
 
+  // En celular el portfolio es un carrusel de bloques de 4: se muestran todos y se desliza de costado.
+  const celuPortfolio = matchMedia("(max-width: 600px)");
+  const pfPuntos = document.getElementById("pf-puntos");
+  function pintarPuntos() {
+    const n = Math.ceil(grilla.children.length / 4);
+    pfPuntos.hidden = !celuPortfolio.matches || n < 2;
+    pfPuntos.innerHTML = Array.from({ length: n }, (_, k) => `<button aria-label="Ver bloque ${k + 1} de ${n}"${k === 0 ? ' class="activo"' : ""}></button>`).join("");
+  }
+  function paginaActual() {
+    const ancho = grilla.clientWidth + 12;
+    return Math.round(grilla.scrollLeft / ancho);
+  }
+  grilla.addEventListener("scroll", () => {
+    const k = paginaActual();
+    [...pfPuntos.children].forEach((b, i) => b.classList.toggle("activo", i === k));
+  }, { passive: true });
+  pfPuntos.addEventListener("click", e => {
+    const k = [...pfPuntos.children].indexOf(e.target);
+    if (k >= 0) grilla.scrollTo({ left: k * (grilla.clientWidth + 12), behavior: "smooth" });
+  });
+  celuPortfolio.addEventListener("change", () => pintarGrilla());
+
   function pintarGrilla() {
     const items = lista();
-    grilla.innerHTML = items.slice(0, mostrados).map(p => `
+    const cuantos = celuPortfolio.matches ? items.length : mostrados;
+    grilla.scrollLeft = 0;
+    grilla.innerHTML = items.slice(0, cuantos).map(p => `
       <button class="video-card" data-id="${p.id}" data-titulo="${p.titulo}">
         <div class="video-card__img">
           <img src="https://i.ytimg.com/vi/${p.id}/hqdefault.jpg" alt="" loading="lazy"
@@ -565,7 +605,8 @@
         <p class="video-card__titulo">${p.titulo}</p>
         <p class="video-card__cliente">${p.cliente}</p>
       </button>`).join("");
-    btnMas.hidden = mostrados >= items.length;
+    btnMas.hidden = cuantos >= items.length;
+    pintarPuntos();
   }
 
   filtros.addEventListener("click", e => {
