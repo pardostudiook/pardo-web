@@ -25,6 +25,7 @@ Sumar una línea en `data/proyectos.json`:
 - `id`: lo que va después de `watch?v=` en el link de YouTube.
 - `area`: crea el filtro automáticamente (Campañas, Publicidad, Institucional, Música, Reels…).
 - `duracion` es opcional.
+- `"oculto": true` lo saca de la web sin borrarlo del archivo (por ejemplo, mientras se vuelve a subir a YouTube). Para mostrarlo de nuevo, se borra esa línea.
 
 ## Fotos del equipo
 
