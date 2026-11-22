@@ -98,6 +98,26 @@ const Plano = ({ segundo, top = 360, alto = FRANJA_ALTO }) => {
   );
 };
 
+// Clip vertical de cliente (720x1280) en una tarjeta de 864x1536: se agranda solo 1,2 veces.
+const PlanoVertical = ({ archivo, segundo }) => {
+  const f = useCurrentFrame();
+  const z = 1 + f * 0.0015;
+  return (
+    <div style={{
+      position: 'absolute', left: 108, top: 150, width: 864, height: 1536, borderRadius: 44, overflow: 'hidden',
+      backgroundColor: NEGRO, boxShadow: '0 40px 100px rgba(0,0,0,.6)',
+    }}>
+      <OffthreadVideo
+        src={staticFile(`v/${archivo}.mp4`)}
+        startFrom={Math.round(segundo * 30)}
+        muted
+        style={{ width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${z})` }}
+      />
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.75) 100%)' }} />
+    </div>
+  );
+};
+
 // Bordes de la franja que se funden con el papel.
 const FundidoFranja = ({ top, alto = FRANJA_ALTO, fuerza = 0.9 }) => (
   <div style={{
@@ -140,24 +160,31 @@ const URL_WEB = 'pardostudio.com.ar';
 const Gancho = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  // Tomas del showreel (segundos): ojo, fuego, danza, sirena, Papá Noel, malambo, cantor, llamas.
-  const cortes = [0.4, 2.4, 18.4, 30.4, 32.4, 12.4, 28.4, 40.4];
-  const largo = 13;
-  const top = 250;
+  // Tomas verticales de clientes (archivo, segundo, cuadros). Sin subtítulos encima.
+  // Abre y cierra con la chica caminando entre las plantas de Prisamata.
+  const cortes = [
+    ['prisamata-05', 17.0, 18],
+    ['boulevard-reel-1', 8.0, 13],
+    ['prisamata-05', 9.6, 13],
+    ['riica-almora-03', 22.5, 13],
+    ['boulevard-reel-4', 2.0, 13],
+    ['prisamata-05', 11.4, 13],
+    ['prisamata-05', 19.4, 60],
+  ];
+  const inicios = cortes.reduce((acc, c, i) => [...acc, i === 0 ? 0 : acc[i - 1] + cortes[i - 1][2]], []);
   const s = spring({ frame: f - 22, fps, config: { damping: 14, mass: 0.7 } });
   return (
     <AbsoluteFill>
       <Papel />
-      {cortes.map((seg, i) => (
-        <Sequence key={i} from={i * largo} durationInFrames={i === cortes.length - 1 ? 200 : largo}>
-          <Plano segundo={seg} top={top} />
+      {cortes.map(([archivo, seg, dur], i) => (
+        <Sequence key={i} from={inicios[i]} durationInFrames={dur}>
+          <PlanoVertical archivo={archivo} segundo={seg} />
         </Sequence>
       ))}
-      <FundidoFranja top={top} fuerza={0.95} />
       <PielPapel />
       <AbsoluteFill style={{ alignItems: 'center' }}>
-        <Img src={staticFile('logo.png')} style={{ position: 'absolute', top: 70, width: 150, opacity: tramo(f, 2, 12) }} />
-        <div style={{ position: 'absolute', top: 1300, transform: `scale(${0.6 + 0.4 * s})`, opacity: Math.min(1, s * 1.4), textAlign: 'center' }}>
+        <Img src={staticFile('logo.png')} style={{ position: 'absolute', top: 36, width: 104, opacity: tramo(f, 2, 12) }} />
+        <div style={{ position: 'absolute', top: 1380, transform: `scale(${0.6 + 0.4 * s})`, opacity: Math.min(1, s * 1.4), textAlign: 'center' }}>
           <Titular size={126}>Estrenamos</Titular>
           <Titular size={230} style={{ marginTop: 6 }}><Calado size={230}>web</Calado></Titular>
         </div>
@@ -219,8 +246,8 @@ const Servicios = () => {
 // 4. Portfolio: publicidad, institucional, videoclips — con los filtros de la web.
 const Portfolio = () => {
   const f = useCurrentFrame();
-  // Tomas del showreel: app de RIU, guitarrista, presentador, gastronomía, ciudad aérea, guitarra.
-  const cortes = [46.4, 22.4, 44.4, 8.4, 34.4, 26.4];
+  // Tomas del showreel: app de RIU, guitarrista, atardecer, gastronomía, ciudad aérea, guitarra.
+  const cortes = [46.4, 22.4, 36.4, 8.4, 34.4, 26.4];
   const largo = 30;
   const top = 600;
   const alto = 1040;
@@ -263,7 +290,7 @@ const Portfolio = () => {
 };
 
 // 5. Contenido para marcas: carrusel de reels de clientes.
-const REELS = ['boulevard-reel-1', 'riica-algaria-03', 'satoshi-pingpong', 'pardo-alcance', 'prisamata-05', 'riica-almora-02', 'boulevard-reel-3'];
+const REELS = ['boulevard-reel-1', 'riica-algaria-03', 'prisamata-11', 'pardo-alcance', 'prisamata-05', 'riica-almora-02', 'boulevard-reel-3'];
 const Redes = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
