@@ -8,22 +8,6 @@
     "fecha": "2026-11-21"
   },
   {
-    "id": "9dStpffwCMQ",
-    "titulo": "Semana del Cine en Salta 2026 – Set de filmación en vivo",
-    "cliente": "Semana del Cine en Salta",
-    "area": "Contenido",
-    "duracion": "00:57",
-    "fecha": "2026-11-21"
-  },
-  {
-    "id": "LLFexyl1VpQ",
-    "titulo": "Ahyre – Faro",
-    "cliente": "Ahyre",
-    "area": "Videoclips",
-    "duracion": "00:44",
-    "fecha": "2026-11-21"
-  },
-  {
     "id": "xzpmV3h42QQ",
     "titulo": "Semana Salta",
     "cliente": "Turismo de Salta",
@@ -91,23 +75,15 @@
     "id": "OJOSQrKvAwU",
     "titulo": "Orellana Lucca feat. Chaqueño Palavecino Show",
     "cliente": "Orellana Lucca",
-    "area": "Contenido",
+    "area": "Videoclips",
     "duracion": "08:05",
-    "fecha": "2026-02-17"
-  },
-  {
-    "id": "PLKzG2O9IwY",
-    "titulo": "Anuario de Cultura de Salta",
-    "cliente": "Cultura de Salta",
-    "area": "Institucional",
-    "duracion": "02:10",
     "fecha": "2026-02-17"
   },
   {
     "id": "rnwh_7ACvJA",
     "titulo": "Experiencia Pink Floyd – The Great Gig Show en vivo",
     "cliente": "The Great Gig Show",
-    "area": "Contenido",
+    "area": "Videoclips",
     "duracion": "05:25",
     "fecha": "2026-02-17"
   },
@@ -139,12 +115,5 @@
     "cliente": "Fondo Ciudadano",
     "area": "Institucional",
     "fecha": "2026-02-17"
-  },
-  {
-    "id": "HvF2nyU7_eM",
-    "titulo": "Norte Rock",
-    "cliente": "Norte Rock",
-    "area": "Contenido",
-    "fecha": "2024-09-24"
   }
 ]
