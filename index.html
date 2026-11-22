@@ -126,17 +126,7 @@
   .presentacion__texto p { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.65; color: var(--texto-suave); }
   .presentacion__texto p + p { margin-top: 16px; }
   .presentacion__texto strong { color: var(--blanco); font-weight: 700; }
-  .clientes { margin-top: clamp(48px, 7vw, 88px); border-top: 1px solid rgba(255,255,255,.12); padding-top: 28px; }
-  .clientes__titulo { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--texto-suave); text-align: center; margin-bottom: 22px; }
-  .clientes__lista { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 40px; list-style: none; padding: 0; margin: 0; }
-  .clientes__lista { align-items: center; gap: 26px 48px; }
-  .clientes__lista li { display: flex; align-items: center; opacity: .72; transition: opacity .2s; }
-  .clientes__lista li:hover { opacity: 1; }
-  .clientes__lista img { display: block; height: var(--h, 40px); width: auto; filter: brightness(0) invert(1); }
-  .clientes__lista img.sin-filtro { filter: none; }
-  .clientes__marca { gap: 8px; font-size: 22px; font-weight: 900; letter-spacing: -.02em; color: var(--blanco); }
-  .clientes__texto { font-size: clamp(15px, 1.5vw, 19px); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--blanco); white-space: nowrap; }
-  @media (max-width: 820px) { .presentacion__grid { grid-template-columns: 1fr; } .clientes__lista { gap: 20px 30px; } .clientes__lista img { height: calc(var(--h, 40px) * .8); } }
+  @media (max-width: 820px) { .presentacion__grid { grid-template-columns: 1fr; } }
   .areas { position: relative; padding: clamp(80px, 12vw, 160px) 0; background: url("assets/bosque.jpg") center / cover; }
   .areas::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.6); }
   .areas__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 80px); }
@@ -367,21 +357,6 @@
           <p>Somos <strong>Pardo Studio</strong>, estudio y productora audiovisual nacida en Argentina. Creamos <strong>campañas publicitarias, contenido para redes, videos institucionales y videoclips</strong>, desde la idea hasta la entrega final.</p>
           <p>También somos especialistas en <strong>postproducción</strong>: edición, color grading, motion graphics, VFX y animación 2D y 3D. Trabajamos con marcas, agencias y empresas de <strong>Argentina, Guatemala y el resto de Latinoamérica</strong>, con rodajes propios o sobre el material que ya tenés.</p>
         </div>
-      </div>
-      <div class="clientes aparecer">
-        <p class="clientes__titulo">Marcas que confiaron en nosotros</p>
-        <ul class="clientes__lista">
-          <li><img src="assets/clientes/riu.svg" alt="RIU Hotels &amp; Resorts" style="--h:44px" loading="lazy"></li>
-          <li><img src="assets/clientes/integral.png" alt="Integral Coseguro de Salud" style="--h:30px" loading="lazy"></li>
-          <li><img class="sin-filtro" src="assets/clientes/cosalta.svg" alt="Cosalta" style="--h:46px" loading="lazy"></li>
-          <li class="clientes__marca"><img src="assets/clientes/medicenter.png" alt="" style="--h:26px" loading="lazy">medicenter</li>
-          <li><img src="assets/clientes/salta.png" alt="Turismo de Salta" style="--h:52px" loading="lazy"></li>
-          <li><img src="assets/clientes/jujuy.png" alt="Jujuy Turismo" style="--h:46px" loading="lazy"></li>
-          <li><img src="assets/clientes/cultura-salta.png" alt="Secretaría de Cultura de Salta" style="--h:32px" loading="lazy"></li>
-          <li><img src="assets/clientes/satoshitango.svg" alt="Satoshi Tango" style="--h:38px" loading="lazy"></li>
-          <li class="clientes__texto">ERGY</li>
-          <li class="clientes__texto">Casino Boulevard</li>
-        </ul>
       </div>
     </div>
   </section>
