@@ -663,7 +663,8 @@
   fetch("data/proyectos.json", { cache: "no-cache" })
     .then(r => r.json())
     // Orden al azar en cada visita (computadora y celular), sin dos trabajos seguidos del mismo cliente.
-    .then(lista => { PROYECTOS = mezclarSinRepetirCliente(lista); pintarFiltros(); pintarGrilla(); datosVideoParaGoogle(lista); })
+    // "oculto": true en proyectos.json lo saca de la web sin borrarlo (por ejemplo, mientras se vuelve a subir a YouTube).
+    .then(todos => { const lista = todos.filter(p => !p.oculto); PROYECTOS = mezclarSinRepetirCliente(lista); pintarFiltros(); pintarGrilla(); datosVideoParaGoogle(lista); })
     .catch(() => { grilla.innerHTML = '<p>No se pudieron cargar los proyectos. <a href="https://www.youtube.com/@PARDOSTUDIO">Miralos en YouTube</a>.</p>'; });
 
   // Contenido para marcas: videos verticales propios (data/contenido.json)
