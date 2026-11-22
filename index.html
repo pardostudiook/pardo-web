@@ -499,7 +499,8 @@
 </div>
 
 <script>
-  // Video de portada: primero se ve la imagen fija; el video (liviano en celular) se carga cuando la página ya está lista.
+  // Video de portada: primero se ve la imagen fija; el video se carga cuando la página ya está lista.
+  // Sale del original de Wix "BG PARA WEB 1600.mp4": computadora 1600x1080 (~2 Mbps), celular 720x960 recortado al centro (~1 Mbps).
   (function () {
     const v = document.getElementById("hero-video");
     const ahorro = (navigator.connection && navigator.connection.saveData) || matchMedia("(prefers-reduced-motion: reduce)").matches;
