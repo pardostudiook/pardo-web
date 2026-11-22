@@ -1,7 +1,7 @@
 [
-  { "nombre": "Luke Gumba", "rol": "Director de Arte", "foto": "assets/luke.png" },
-  { "nombre": "Florencia Rivero", "rol": "Jefa de cuentas", "foto": "assets/flor.png" },
-  { "nombre": "Emanuel Abregu", "rol": "Jefe de Post producción", "foto": "assets/ema.png" },
+  { "nombre": "Luke Gumba", "rol": "Director de Arte", "foto": "assets/equipo/luke.png" },
+  { "nombre": "Florencia Rivero", "rol": "Jefa de cuentas", "foto": "assets/equipo/flor.png" },
+  { "nombre": "Emanuel Abregu", "rol": "Jefe de Post producción", "foto": "assets/equipo/ema.png" },
   { "nombre": "Rocío Katsinis", "rol": "Productora" },
   { "nombre": "Josefina Grigoras", "rol": "Social Media" },
   { "nombre": "Mariano Pica", "rol": "Editor" },
