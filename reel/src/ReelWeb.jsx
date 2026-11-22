@@ -128,7 +128,7 @@ const FundidoFranja = ({ top, alto = FRANJA_ALTO, fuerza = 0.9 }) => (
 
 // Celular con la web adentro. "scroll" está en píxeles de la captura (que es a 2x).
 const ANCHO_CAPTURA = 780;
-const Celular = ({ scroll, ancho = 720, style }) => {
+const Celular = ({ scroll, ancho = 720, style, conVideo = false, videoDesde = 0 }) => {
   const borde = 16;
   const interior = ancho - borde * 2;
   const alto = Math.round(interior * (844 / 390));
@@ -140,9 +140,57 @@ const Celular = ({ scroll, ancho = 720, style }) => {
     }}>
       <div style={{ position: 'relative', width: interior, height: alto, borderRadius: 80, overflow: 'hidden', background: NEGRO }}>
         <Img src={staticFile('web.png')} style={{ position: 'absolute', left: 0, top: -scroll * k, width: interior }} />
+        {conVideo && (
+          // Portada "andando": el video de fondo real de la web, con los textos y el botón encima.
+          <div style={{ position: 'absolute', left: 0, top: -scroll * k, width: interior, height: alto, overflow: 'hidden', background: NEGRO }}>
+            <OffthreadVideo src={staticFile('hero-movil.mp4')} startFrom={Math.round(videoDesde * 30)} muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <Img src={staticFile('hero-capa.png')} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
+          </div>
+        )}
         <div style={{ position: 'absolute', top: 18, left: '50%', width: 190, height: 52, marginLeft: -95, borderRadius: 30, background: '#000' }} />
       </div>
     </div>
+  );
+};
+
+// Cursor con forma de garra de oso. La punta de la garra del medio es el punto que "clickea".
+const GARRA_PUNTA = { x: 62, y: 6 };
+const CursorGarra = ({ x, y, apretando = 0, opacidad = 1 }) => (
+  <div style={{
+    position: 'absolute', left: x - GARRA_PUNTA.x, top: y - GARRA_PUNTA.y, width: 124, height: 150, opacity: opacidad,
+    transform: `rotate(-14deg) scale(${1 - 0.14 * apretando})`, transformOrigin: `${GARRA_PUNTA.x}px ${GARRA_PUNTA.y}px`,
+    filter: 'drop-shadow(0 10px 18px rgba(0,0,0,.55))',
+  }}>
+    <svg width="124" height="150" viewBox="0 0 124 150">
+      <g fill={BLANCO} stroke={NEGRO} strokeWidth="5" strokeLinejoin="round">
+        {/* garras */}
+        <path d="M62 6 C56 16 55 26 57 34 L67 34 C69 26 68 16 62 6 Z" />
+        <path d="M30 22 C26 32 27 41 31 48 L40 44 C39 36 36 29 30 22 Z" />
+        <path d="M94 22 C98 32 97 41 93 48 L84 44 C85 36 88 29 94 22 Z" />
+        <path d="M8 52 C8 62 11 70 17 75 L24 68 C20 62 15 57 8 52 Z" />
+        {/* dedos */}
+        <ellipse cx="62" cy="46" rx="15" ry="18" />
+        <ellipse cx="36" cy="57" rx="13" ry="16" transform="rotate(-18 36 57)" />
+        <ellipse cx="88" cy="57" rx="13" ry="16" transform="rotate(18 88 57)" />
+        <ellipse cx="20" cy="84" rx="12" ry="14" transform="rotate(-40 20 84)" />
+        {/* almohadilla */}
+        <path d="M62 78 C86 78 104 96 104 116 C104 136 88 144 74 140 C68 138 66 136 62 136 C58 136 56 138 50 140 C36 144 20 136 20 116 C20 96 38 78 62 78 Z" />
+      </g>
+    </svg>
+  </div>
+);
+
+// Onda que se expande donde clickea la garra.
+const Click = ({ x, y, desde }) => {
+  const f = useCurrentFrame();
+  const p = tramo(f, desde, desde + 14);
+  if (f < desde || p >= 1) return null;
+  const r = 20 + 90 * p;
+  return (
+    <div style={{
+      position: 'absolute', left: x - r, top: y - r, width: r * 2, height: r * 2, borderRadius: '50%',
+      border: `6px solid ${ROJO}`, opacity: 1 - p,
+    }} />
   );
 };
 
@@ -164,11 +212,11 @@ const Gancho = () => {
   // Prisamata (chica del sombrero) solo en dos planos: abre caminando y cierra en primer plano.
   const cortes = [
     ['prisamata-05', 17.0, 22],     // caminando entre las plantas
-    ['boulevard-reel-2', 0.1, 18],  // Casino Boulevard: lanza la ficha
+    ['boulevard-reel-2', 3.75, 16], // Casino Boulevard: agarra la ficha y la muestra
     ['videocaso-01', 1.5, 15],      // Agéntica: dron sobre el edificio
     ['videocaso-01', 5.0, 14],      // Agéntica: Camila sentada (antes del cartel con su nombre)
     ['riica-almora-03', 22.5, 13],  // RIICA: caminando en el campo
-    ['prisamata-05', 9.6, 60],      // primer plano con sombrero, detrás del título
+    ['prisamata-05', 9.6, 62],      // primer plano con sombrero, detrás del título
   ];
   const inicios = cortes.reduce((acc, c, i) => [...acc, i === 0 ? 0 : acc[i - 1] + cortes[i - 1][2]], []);
   const s = spring({ frame: f - 22, fps, config: { damping: 14, mass: 0.7 } });
@@ -197,7 +245,19 @@ const Web = () => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const entra = spring({ frame: f - 6, fps, config: { damping: 18 } });
-  const scroll = interpolate(f, [62, 108], [0, 1688], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic) });
+  const TAP = 58;
+  const scroll = interpolate(f, [TAP + 6, TAP + 50], [0, 1688], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic) });
+  // Pantalla del celular ya acomodado: arranca en (196, 486) y la captura va a escala k.
+  const k = 688 / ANCHO_CAPTURA;
+  const tap = { x: 196 + 390 * k, y: 486 + 1336 * k };
+  // La garra entra desde abajo a la derecha, va al botón "Conocé todo lo que podemos hacer", clickea y se corre un poco.
+  const ir = tramo(f, 30, TAP - 2);
+  const despues = tramo(f, TAP + 8, TAP + 40);
+  const garra = f < TAP
+    ? { x: interpolate(ir, [0, 1], [1010, tap.x]), y: interpolate(ir, [0, 1], [1900, tap.y]) }
+    : { x: tap.x + 150 * despues, y: tap.y - 160 * despues };
+  const apretando = interpolate(f, [TAP - 3, TAP, TAP + 5], [0, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const opacidad = Math.min(tramo(f, 30, 38), 1 - tramo(f, 118, 130));
   return (
     <AbsoluteFill>
       <Papel />
@@ -206,8 +266,10 @@ const Web = () => {
         <Sube desde={10} style={{ marginTop: 26 }}><Etiqueta style={{ fontSize: 52, letterSpacing: '0.02em', textTransform: 'none', padding: '16px 34px' }}>{URL_WEB}</Etiqueta></Sube>
       </AbsoluteFill>
       <AbsoluteFill style={{ alignItems: 'center' }}>
-        <Celular scroll={scroll} style={{ marginTop: 470 + (1 - entra) * 1300, transform: `rotate(${(1 - entra) * 6}deg)` }} />
+        <Celular scroll={scroll} conVideo videoDesde={17.5} style={{ marginTop: 470 + (1 - entra) * 1300, transform: `rotate(${(1 - entra) * 6}deg)` }} />
       </AbsoluteFill>
+      <Click x={tap.x} y={tap.y} desde={TAP} />
+      <CursorGarra x={garra.x} y={garra.y} apretando={apretando} opacidad={opacidad} />
       <Barrido />
     </AbsoluteFill>
   );

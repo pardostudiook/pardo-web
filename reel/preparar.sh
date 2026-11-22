@@ -4,7 +4,7 @@ set -e
 cd "$(dirname "$0")"
 A=../assets
 mkdir -p public/v
-cp $A/logo.png $A/logo-pardo-vertical.png $A/papel-negro.jpg $A/papel-blanco.jpg $A/bosque.jpg $A/contacto.jpg public/
+cp $A/hero-movil.mp4 $A/logo.png $A/logo-pardo-vertical.png $A/papel-negro.jpg $A/papel-blanco.jpg $A/bosque.jpg $A/contacto.jpg public/
 for v in boulevard-reel-1 boulevard-reel-2 boulevard-reel-3 videocaso-01 pardo-alcance riica-algaria-03 riica-almora-02 riica-almora-03 prisamata-01 prisamata-05 prisamata-11; do cp $A/verticales/$v.mp4 public/v/; done
 # Showreel de portada en alta (original subido a Wix, 1600x1080). Se pasa a H.264 para Remotion.
 if [ ! -f public/hero-alta.mp4 ]; then
