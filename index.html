@@ -119,7 +119,7 @@
   @keyframes bajar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
   /* ---------- Áreas ---------- */
-  .presentacion { padding: clamp(72px, 10vw, 130px) 0 clamp(56px, 8vw, 96px); background: var(--negro); }
+  .presentacion { padding: calc(clamp(72px, 10vw, 130px) - 10px) 0 calc(clamp(56px, 8vw, 96px) + 10px); background: var(--negro); }
   .presentacion__grid { display: grid; grid-template-columns: minmax(0, 580px) minmax(0, 460px); justify-content: space-between; gap: clamp(28px, 6vw, 120px); align-items: start; }
   .presentacion h2 { font-size: clamp(38px, 5vw, 72px); font-weight: 900; line-height: 1.14; letter-spacing: 0; }
   .presentacion h2 em { font-style: normal; color: var(--rojo); }
