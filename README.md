@@ -26,6 +26,13 @@ Sumar una línea en `data/proyectos.json`:
 - `area`: crea el filtro automáticamente (Campañas, Publicidad, Institucional, Música, Reels…).
 - `duracion` es opcional.
 
+## Fotos del equipo
+
+Van en `assets/equipo/` y se cargan en `data/equipo.json` con el campo `"foto"`.
+La web las muestra en blanco y negro dentro de un círculo con aro rojo, así que conviene una foto **cuadrada**,
+de pecho para arriba y con la cara al centro (si viene en otro formato, se recorta al centro).
+Quien no tiene `"foto"` aparece con una silueta en el mismo círculo.
+
 ## Dominio
 
 - `pardostudio.com.ar` está registrado en NIC Argentina (vence el 19/02/2027) y delegado a Cloudflare (DNS).
