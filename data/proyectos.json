@@ -1,20 +1,99 @@
 [
   {
+    "id": "ZOL7fu-dzrs",
+    "titulo": "Integral – 24 años de trayectoria",
+    "cliente": "Integral",
+    "area": "Institucional",
+    "duracion": "01:15",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "yf-_fmJaWDc",
+    "titulo": "Canto 4 – A Todo o Nada",
+    "cliente": "Canto 4",
+    "area": "Videoclips",
+    "duracion": "04:46",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "GSKntU3igcY",
+    "titulo": "Ahyre – Faro",
+    "cliente": "Ahyre",
+    "area": "Videoclips",
+    "duracion": "03:23",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "Ir_y2rEnQeQ",
+    "titulo": "Bienvenida a El Galpón – Video institucional",
+    "cliente": "Municipio de El Galpón",
+    "area": "Institucional",
+    "duracion": "00:55",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "RLkcAg8KBuM",
+    "titulo": "Algaria Residence",
+    "cliente": "RIICA",
+    "area": "Publicidad",
+    "duracion": "01:22",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "EfV04QFm3jc",
+    "titulo": "Las Voces de Orán – A mi Salta la linda",
+    "cliente": "Las Voces de Orán",
+    "area": "Videoclips",
+    "duracion": "02:54",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "j7Vy_wLlnjw",
+    "titulo": "Silica Institucional",
+    "cliente": "Silica",
+    "area": "Institucional",
+    "duracion": "01:09",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "N4hk070Xul0",
+    "titulo": "Canto 4 – Madre",
+    "cliente": "Canto 4",
+    "area": "Videoclips",
+    "duracion": "04:09",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "ShZD2RA5Qzw",
+    "titulo": "Algaria Suites",
+    "cliente": "RIICA",
+    "area": "Publicidad",
+    "duracion": "01:15",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "eCj0vUciSaw",
+    "titulo": "Canción al Tren a las Nubes",
+    "cliente": "Tren a las Nubes",
+    "area": "Videoclips",
+    "duracion": "08:40",
+    "fecha": "2026-11-22"
+  },
+  {
+    "id": "ZQSvzIzVrGs",
+    "titulo": "Prisamata",
+    "cliente": "Prisamata",
+    "area": "Publicidad",
+    "duracion": "01:00",
+    "fecha": "2026-11-22"
+  },
+  {
     "id": "gFyHTXZL1hw",
     "titulo": "Conjuro 2026",
     "cliente": "JMT",
     "area": "Publicidad",
     "duracion": "02:01",
     "fecha": "2026-11-22"
-  },
-  {
-    "id": "wYMdV64AD-0",
-    "oculto": true,
-    "titulo": "Integral – 24 años de trayectoria",
-    "cliente": "Integral",
-    "area": "Institucional",
-    "duracion": "01:15",
-    "fecha": "2026-11-21"
   },
   {
     "id": "xzpmV3h42QQ",
