@@ -214,7 +214,7 @@ const Gancho = () => {
     ['prisamata-05', 17.0, 22],     // caminando entre las plantas
     ['boulevard-reel-2', 3.75, 16], // Casino Boulevard: agarra la ficha y la muestra
     ['videocaso-01', 1.5, 15],      // Agéntica: dron sobre el edificio
-    ['videocaso-01', 5.0, 14],      // Agéntica: Camila sentada (antes del cartel con su nombre)
+    ['videocaso-01', 23.3, 14],     // Agéntica: Camila sentada (toma final, sin cartel)
     ['riica-almora-03', 22.5, 13],  // RIICA: caminando en el campo
     ['prisamata-05', 9.6, 62],      // primer plano con sombrero, detrás del título
   ];

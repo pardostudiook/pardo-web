@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "studio": "remotion studio src/index.jsx",
-    "render": "remotion render src/index.jsx ReelWeb out/reel-web-pardo.mp4"
+    "render": "remotion render src/index.jsx ReelWeb out/reel-master.mov --codec=prores --prores-profile=hq && ffmpeg -y -i out/reel-master.mov -c:v libx265 -preset slow -crf 16 -pix_fmt yuv420p10le -profile:v main10 -tag:v hvc1 -c:a aac -b:a 192k -movflags +faststart out/reel-web-pardo-h265.mp4"
   },
   "dependencies": {
     "@fontsource/red-hat-display": "^5.3.0",
