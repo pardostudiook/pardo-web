@@ -662,7 +662,8 @@
 
   fetch("data/proyectos.json", { cache: "no-cache" })
     .then(r => r.json())
-    .then(lista => { PROYECTOS = lista; pintarFiltros(); pintarGrilla(); datosVideoParaGoogle(lista); })
+    // Orden al azar en cada visita (computadora y celular), sin dos trabajos seguidos del mismo cliente.
+    .then(lista => { PROYECTOS = mezclarSinRepetirCliente(lista); pintarFiltros(); pintarGrilla(); datosVideoParaGoogle(lista); })
     .catch(() => { grilla.innerHTML = '<p>No se pudieron cargar los proyectos. <a href="https://www.youtube.com/@PARDOSTUDIO">Miralos en YouTube</a>.</p>'; });
 
   // Contenido para marcas: videos verticales propios (data/contenido.json)
@@ -674,6 +675,16 @@
   function mezclar(lista) {
     const a = lista.slice();
     for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  // Mezcla totalmente al azar y después separa los trabajos del mismo cliente que quedaron juntos.
+  function mezclarSinRepetirCliente(items) {
+    const a = mezclar(items);
+    for (let i = 1; i < a.length; i++) {
+      if (a[i].cliente !== a[i - 1].cliente) continue;
+      const j = a.findIndex((p, k) => k > i && p.cliente !== a[i - 1].cliente && (k + 1 >= a.length || a[k + 1].cliente !== a[i].cliente) && a[k - 1].cliente !== a[i].cliente);
+      if (j > 0) [a[i], a[j]] = [a[j], a[i]];
+    }
     return a;
   }
   function mezclarPorCliente(items) {
