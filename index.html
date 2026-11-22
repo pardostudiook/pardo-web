@@ -119,16 +119,17 @@
   @keyframes bajar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
   /* ---------- Áreas ---------- */
-  .presentacion { padding: clamp(72px, 10vw, 130px) 0 clamp(56px, 8vw, 96px); background: var(--negro); }
-  .presentacion__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(28px, 5vw, 80px); align-items: start; }
-  .presentacion h2 { font-size: clamp(32px, 4.6vw, 60px); font-weight: 900; line-height: 1.02; letter-spacing: -.01em; }
+  .presentacion { padding: clamp(72px, 9vw, 120px) 0; background: var(--negro); }
+  .presentacion__grid { display: grid; grid-template-columns: minmax(0, 580px) minmax(0, 460px); justify-content: space-between; gap: clamp(28px, 6vw, 120px); align-items: start; }
+  .presentacion h2 { font-size: clamp(38px, 5vw, 72px); font-weight: 900; line-height: 1.14; letter-spacing: 0; }
   .presentacion h2 em { font-style: normal; color: var(--rojo); }
-  .presentacion__texto p { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.65; color: var(--texto-suave); }
-  .presentacion__texto p + p { margin-top: 16px; }
-  .presentacion__texto strong { color: var(--blanco); font-weight: 700; }
+  .presentacion__texto { padding-top: .35em; }
+  .presentacion__texto p { font-size: clamp(17px, 1.55vw, 22px); font-weight: 500; line-height: 1.28; color: var(--texto-suave); }
+  .presentacion__texto p + p { margin-top: 1.28em; }
+  .presentacion__texto strong { color: inherit; font-weight: inherit; }
   @media (max-width: 820px) { .presentacion__grid { grid-template-columns: 1fr; } }
   .areas { position: relative; padding: clamp(80px, 12vw, 160px) 0; background: url("assets/bosque.jpg") center / cover; }
-  .areas::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+  .areas::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--negro) 0%, rgba(11,10,11,.82) 14%, rgba(0,0,0,.6) 32%, rgba(0,0,0,.6) 100%); }
   .areas__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 80px); }
   .area { text-align: center; }
   .area h2 { font-size: clamp(40px, 6.5vw, 86px); font-weight: 900; line-height: .95; letter-spacing: -.01em; }
@@ -215,7 +216,9 @@
   }
   .ig-pista::-webkit-scrollbar { display: none; }
   /* Videos verticales propios (data/contenido.json) */
-  .ig-card { flex: 0 0 clamp(200px, 22vw, 260px); scroll-snap-align: start; }
+  .ig-card { flex: 0 0 clamp(200px, 22vw, 260px); scroll-snap-align: start; opacity: 0; transform: translateY(24px) scale(.97); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+  .ig-card.listo { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .ig-card { transform: none; transition: opacity .3s; } }
   .ig-card__marco { position: relative; aspect-ratio: 9 / 16; overflow: hidden; border-radius: 10px; background: #000; cursor: pointer; }
   .ig-card__marco video { width: 100%; height: 100%; object-fit: cover; display: block; }
   .ig-card__sonido { position: absolute; right: 10px; bottom: 10px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: rgba(0,0,0,.55); color: #fff; display: grid; place-items: center; cursor: pointer; }
@@ -349,13 +352,13 @@
     <div class="hero__contenido">
       <h1 class="hero__logo"><img src="assets/logo-pardo-vertical.png" alt="Pardo" width="798" height="630"><span class="solo-lectores"> Studio, productora audiovisual en Salta</span></h1>
       <p>Creatividad visual para tu historia</p>
-      <a class="boton" href="#areas">Conocé todo lo que podemos hacer por tu marca</a>
+      <a class="boton" href="#nosotros">Conocé todo lo que podemos hacer por tu marca</a>
     </div>
     <svg class="hero__flecha" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
   </section>
 
   <!-- Presentación (texto para visitantes y para Google) -->
-  <section class="presentacion" id="nosotros" hidden>
+  <section class="presentacion" id="nosotros">
     <div class="contenedor">
       <div class="presentacion__grid">
         <h2 class="aparecer">Productora audiovisual en Salta, <em>para marcas de toda Latinoamérica.</em></h2>
@@ -660,12 +663,66 @@
             <button class="ig-card__sonido" aria-label="Activar sonido">${iconoMudo}</button>
           </div>
         </article>`).join("");
-      // Se reproducen solos (sin sonido) cuando están a la vista, y se pausan al salir
+      // Carga por adelantado: apenas termina de cargar la página, se empiezan a bajar
+      // los primeros videos (de a uno, en orden) aunque el visitante todavía no haya
+      // llegado a esta sección. El resto sigue bajando cuando la sección se acerca.
+      // Las tarjetas aparecen escalonadas (fundido) cuando el visitante llega.
+      const ADELANTADOS = 6;
+      const tarjetas = [...igPista.querySelectorAll(".ig-card")];
+      const enVista = new Set();
       const vista = new IntersectionObserver(es => es.forEach(e => {
         const v = e.target;
-        if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+        if (e.isIntersecting) { enVista.add(v); if (v.closest(".ig-card").classList.contains("listo")) v.play().catch(() => {}); }
+        else { enVista.delete(v); v.pause(); }
       }), { threshold: .5 });
-      igPista.querySelectorAll("video").forEach(v => vista.observe(v));
+      tarjetas.forEach(t => vista.observe(t.querySelector("video")));
+
+      // Aparición escalonada: solo cuando la sección está a la vista
+      let seccionVisible = false;
+      const porMostrar = [];
+      let mostrando = false;
+      const mostrarProxima = () => {
+        const t = porMostrar.shift();
+        if (!t) { mostrando = false; return; }
+        mostrando = true;
+        t.classList.add("listo");
+        const v = t.querySelector("video");
+        if (enVista.has(v)) v.play().catch(() => {});
+        setTimeout(mostrarProxima, 180);
+      };
+      const encolar = t => { porMostrar.push(t); if (!mostrando) mostrarProxima(); };
+      const listas = new Set();
+      const marcarLista = t => { listas.add(t); if (seccionVisible) encolar(t); };
+
+      // Descarga en fila, un video por vez
+      let siguiente = 0, permitido = ADELANTADOS, bajando = false;
+      const cargarSiguiente = () => {
+        if (siguiente >= tarjetas.length || siguiente >= permitido) { bajando = false; return; }
+        bajando = true;
+        const t = tarjetas[siguiente++], v = t.querySelector("video");
+        let hecho = false;
+        const fin = () => { if (hecho) return; hecho = true; marcarLista(t); cargarSiguiente(); };
+        v.addEventListener("canplaythrough", fin, { once: true });
+        v.addEventListener("error", fin, { once: true });
+        setTimeout(fin, 12000);
+        v.preload = "auto";
+        v.load();
+      };
+      const arrancarPrecarga = () => setTimeout(() => { if (!bajando) cargarSiguiente(); }, 1500);
+      if (document.readyState === "complete") arrancarPrecarga(); else addEventListener("load", arrancarPrecarga);
+
+      // Cuando la sección se acerca: habilita bajar todos; cuando se ve, muestra lo que ya está listo
+      new IntersectionObserver((es, o) => {
+        if (es.some(e => e.isIntersecting)) { o.disconnect(); permitido = tarjetas.length; if (!bajando) cargarSiguiente(); }
+      }, { rootMargin: "800px 0px" }).observe(igPista);
+      new IntersectionObserver((es, o) => {
+        if (es.some(e => e.isIntersecting)) {
+          o.disconnect(); seccionVisible = true;
+          tarjetas.filter(t => listas.has(t)).forEach(encolar);
+          // las que no estén listas a los 9 s aparecen con su portada igual
+          setTimeout(() => tarjetas.filter(t => !listas.has(t) && !t.classList.contains("listo")).forEach(t => { listas.add(t); encolar(t); }), 9000);
+        }
+      }, { threshold: .15 }).observe(igPista);
       // Tocar el video o el parlante activa/desactiva el sonido (solo uno con sonido a la vez)
       igPista.addEventListener("click", e => {
         const marco = e.target.closest(".ig-card__marco");
