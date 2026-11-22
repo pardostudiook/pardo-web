@@ -1,6 +1,6 @@
 # Reel "Estrenamos web": guion de voz
 
-Duración: 34 segundos, formato vertical 1080x1920 (Reels, TikTok, Shorts).
+Duración: 39 segundos (escenas ajustadas a la voz de ElevenLabs que está en `voz/`), formato vertical 1080x1920 (Reels, TikTok, Shorts).
 El video se entiende sin sonido porque cada escena tiene su texto en pantalla. La voz va arriba, con ritmo tranquilo y cálido, tuteando ("vos").
 
 | Tiempo | Escena (lo que se ve) | Voz |
@@ -30,5 +30,5 @@ El video se entiende sin sonido porque cada escena tiene su texto en pantalla. L
 cd reel
 npm install
 ./preparar.sh          # copia el material de la web y saca la captura del sitio
-npm run render         # crea out/reel-web-pardo.mp4
+npm run render         # crea out/reel-web-pardo-h265.mp4 (con la voz de voz/)
 ```

@@ -4,6 +4,7 @@ set -e
 cd "$(dirname "$0")"
 A=../assets
 mkdir -p public/v
+mkdir -p public/voz && cp voz/*.mp3 public/voz/
 cp $A/hero-movil.mp4 $A/logo.png $A/logo-pardo-vertical.png $A/papel-negro.jpg $A/papel-blanco.jpg $A/bosque.jpg $A/contacto.jpg public/
 # Clips verticales. Si ORIGINALES apunta a la carpeta con los originales de Drive (mismos nombres cortos),
 # se usan esos (1080x1920 o 4K, sin la compresión de la web). Si no, se usan los de la web.
