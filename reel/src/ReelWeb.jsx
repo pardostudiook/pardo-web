@@ -12,15 +12,15 @@ const SUAVE = '#c9c6c9';
 const FUENTE = '"Red Hat Display", system-ui, sans-serif';
 
 // Duración de cada escena (en cuadros, 30 por segundo). Ajustadas a la voz en off (reel/voz/*.mp3,
-// voz "Mauricio" de ElevenLabs): cada frase entra apenas empieza su escena y termina antes del corte.
+// voz "Mauricio" de ElevenLabs, modelo v3): cada frase entra apenas empieza su escena y termina antes del corte.
 export const ESCENAS = {
   gancho: 105,     // 0:00.0 – 0:03.5  voz 01 (1,3 s)
-  web: 186,        // 0:03.5 – 0:09.7  voz 02 (5,5 s)
-  servicios: 240,  // 0:09.7 – 0:17.7  voz 03 (7,3 s)
-  portfolio: 225,  // 0:17.7 – 0:25.2  voz 04 (6,8 s)
-  redes: 150,      // 0:25.2 – 0:30.2  voz 05 (4,0 s)
-  contacto: 150,   // 0:30.2 – 0:35.2  voz 06 (4,3 s)
-  cierre: 120,     // 0:35.2 – 0:39.2  voz 07 (3,0 s)
+  web: 192,        // 0:03.5 – 0:09.9  voz 02 (5,8 s)
+  servicios: 240,  // 0:09.9 – 0:17.9  voz 03 (6,2 s)
+  portfolio: 195,  // 0:17.9 – 0:24.4  voz 04 (5,2 s)
+  redes: 150,      // 0:24.4 – 0:29.4  voz 05 (3,3 s)
+  contacto: 150,   // 0:29.4 – 0:34.4  voz 06 (4,5 s)
+  cierre: 120,     // 0:34.4 – 0:38.4  voz 07 (3,2 s)
 };
 export const DURACION = Object.values(ESCENAS).reduce((a, b) => a + b, 0);
 
@@ -307,7 +307,7 @@ const Servicios = () => {
       <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', gap: 120 }}>
         <Sube desde={2} style={{ position: 'absolute', top: 190 }}><Etiqueta>Servicios</Etiqueta></Sube>
         {bloque(8, 'Content', 'Studio', 'Dirección creativa, estrategia y producción de contenido.')}
-        {bloque(105, 'Post', 'Studio', 'VFX, color grading, compositing y animación 2D y 3D.')}
+        {bloque(125, 'Post', 'Studio', 'VFX, color grading, compositing y animación 2D y 3D.')}
       </AbsoluteFill>
       <Barrido />
     </AbsoluteFill>
