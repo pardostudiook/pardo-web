@@ -144,22 +144,27 @@
   .filtro:hover { border-color: var(--blanco); }
   .filtro.activo { background: var(--rojo); border-color: var(--rojo); }
   .portfolio .contenedor { width: min(1440px, 100% - 32px); }
-  .grilla { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px 16px; }
-  @media (max-width: 1100px) { .grilla { grid-template-columns: repeat(3, 1fr); } }
-  /* Celular: bloques de 4 (2x2) que se deslizan de izquierda a derecha */
-  .pf-puntos { display: none; }
+  /* Portfolio en bloques de 2 filas que se deslizan de costado (computadora: 4 columnas, tablet: 3, celular: 2). */
+  .grilla { --cols: 4; --gap-x: 16px; display: grid; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-auto-columns: calc((100% - (var(--cols) - 1) * var(--gap-x)) / var(--cols)); gap: 24px var(--gap-x); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+  .grilla::-webkit-scrollbar { display: none; }
+  .grilla .video-card.pf-inicio { scroll-snap-align: start; scroll-snap-stop: always; }
+  @media (max-width: 1100px) { .grilla { --cols: 3; } }
+  .pf-nav { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 32px; }
+  .pf-nav[hidden] { display: none; }
+  .pf-puntos { display: flex; justify-content: center; align-items: center; gap: 10px; }
+  .pf-puntos button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.35); cursor: pointer; transition: width .3s, background .3s; }
+  .pf-puntos button.activo { width: 26px; border-radius: 6px; background: var(--rojo); }
+  .pf-flecha { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.35); background: transparent; color: var(--blanco); cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s, opacity .2s; }
+  .pf-flecha:hover { background: var(--rojo); border-color: var(--rojo); }
+  .pf-flecha:disabled { opacity: .3; cursor: default; background: transparent; border-color: rgba(255,255,255,.35); }
+  .pf-flecha svg { width: 20px; height: 20px; fill: currentColor; }
   @media (max-width: 600px) {
-    .grilla { grid-template-columns: none; grid-auto-flow: column; grid-template-rows: repeat(2, auto); grid-auto-columns: calc((100% - 12px) / 2); gap: 22px 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
-    .grilla::-webkit-scrollbar { display: none; }
-    .grilla .video-card:nth-child(4n+1) { scroll-snap-align: start; scroll-snap-stop: always; }
+    .grilla { --cols: 2; --gap-x: 12px; gap: 22px 12px; }
     .video-card__titulo { font-size: 12px; }
     .video-card__cliente { font-size: 12px; }
     .video-card__play svg { width: 44px; height: 44px; }
-    .cargar-mas { display: none; }
-    .pf-puntos { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 26px; }
-    .pf-puntos[hidden] { display: none; }
-    .pf-puntos button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.35); cursor: pointer; transition: width .3s, background .3s; }
-    .pf-puntos button.activo { width: 26px; border-radius: 6px; background: var(--rojo); }
+    .pf-nav { margin-top: 26px; }
+    .pf-flecha { display: none; }
   }
   .video-card { background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
   .video-card__img { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px; background: var(--gris); }
@@ -170,8 +175,6 @@
   .video-card:hover .video-card__play, .video-card:focus-visible .video-card__play { opacity: 1; }
   .video-card__titulo { margin-top: 10px; font-size: 13px; font-weight: 700; text-transform: uppercase; line-height: 1.3; }
   .video-card__cliente { margin-top: 4px; font-size: 13px; color: var(--texto-suave); }
-  .cargar-mas { display: block; margin: 48px auto 0; background: transparent; color: var(--blanco); cursor: pointer; font-family: inherit; }
-  .cargar-mas[hidden] { display: none; }
 
   /* ---------- Servicios ---------- */
   .servicios { background: #000; }
@@ -403,8 +406,11 @@
       <h2 class="titulo-seccion aparecer">Portfolio</h2>
       <div class="filtros" id="filtros" role="group" aria-label="Filtrar proyectos"></div>
       <div class="grilla" id="grilla"></div>
-      <div class="pf-puntos" id="pf-puntos" role="group" aria-label="Páginas del portfolio"></div>
-      <button class="boton cargar-mas" id="cargar-mas">Cargar más</button>
+      <div class="pf-nav" id="pf-nav" hidden>
+        <button class="pf-flecha" id="pf-prev" aria-label="Proyectos anteriores"><svg viewBox="0 0 24 24"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4L10.8 12z"/></svg></button>
+        <div class="pf-puntos" id="pf-puntos" role="group" aria-label="Páginas del portfolio"></div>
+        <button class="pf-flecha" id="pf-next" aria-label="Más proyectos"><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></button>
+      </div>
     </div>
   </section>
 
@@ -544,12 +550,9 @@
      Ese archivo es el que se actualiza cuando subís un video nuevo a YouTube. */
   let PROYECTOS = [];
 
-  const POR_PAGINA = 15;
   let filtroActivo = "Todos";
-  let mostrados = POR_PAGINA;
 
   const grilla = document.getElementById("grilla");
-  const btnMas = document.getElementById("cargar-mas");
   const filtros = document.getElementById("filtros");
 
   const iconoPlay = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="31" fill="rgba(196,22,28,.9)"/><path d="M26 20l18 12-18 12z" fill="#fff"/></svg>';
@@ -566,33 +569,57 @@
     ).join("");
   }
 
-  // En celular el portfolio es un carrusel de bloques de 4: se muestran todos y se desliza de costado.
-  const celuPortfolio = matchMedia("(max-width: 600px)");
+  // El portfolio es un carrusel de bloques de 2 filas (4 columnas en computadora, 3 en tablet, 2 en celular):
+  // se muestran todos los proyectos y se desliza de costado, con flechas y puntitos.
+  const pfNav = document.getElementById("pf-nav");
   const pfPuntos = document.getElementById("pf-puntos");
+  const pfPrev = document.getElementById("pf-prev");
+  const pfNext = document.getElementById("pf-next");
+  const columnas = () => parseInt(getComputedStyle(grilla).getPropertyValue("--cols")) || 4;
+  const anchoPagina = () => grilla.clientWidth + (parseFloat(getComputedStyle(grilla).columnGap) || 0);
+  const tarjetas = () => grilla.querySelectorAll(".video-card");
+  const totalPaginas = () => Math.ceil(tarjetas().length / (columnas() * 2));
+  const paginaActual = () => Math.round(grilla.scrollLeft / anchoPagina());
+  // Marca la primera tarjeta de cada bloque (para que el deslizamiento frene ahí) y completa el último
+  // bloque con huecos vacíos, así la última página también queda alineada y se puede llegar a ella.
+  function marcarInicios() {
+    const porBloque = columnas() * 2;
+    grilla.querySelectorAll(".pf-hueco").forEach(h => h.remove());
+    const cards = [...tarjetas()];
+    cards.forEach((c, i) => c.classList.toggle("pf-inicio", i % porBloque === 0));
+    const faltan = (porBloque - cards.length % porBloque) % porBloque;
+    for (let i = 0; i < faltan; i++) grilla.insertAdjacentHTML("beforeend", '<div class="pf-hueco" aria-hidden="true"></div>');
+  }
   function pintarPuntos() {
-    const n = Math.ceil(grilla.children.length / 4);
-    pfPuntos.hidden = !celuPortfolio.matches || n < 2;
+    const n = totalPaginas();
+    pfNav.hidden = n < 2;
     pfPuntos.innerHTML = Array.from({ length: n }, (_, k) => `<button aria-label="Ver bloque ${k + 1} de ${n}"${k === 0 ? ' class="activo"' : ""}></button>`).join("");
+    actualizarNav();
   }
-  function paginaActual() {
-    const ancho = grilla.clientWidth + 12;
-    return Math.round(grilla.scrollLeft / ancho);
-  }
-  grilla.addEventListener("scroll", () => {
+  function actualizarNav() {
     const k = paginaActual();
     [...pfPuntos.children].forEach((b, i) => b.classList.toggle("activo", i === k));
-  }, { passive: true });
+    pfPrev.disabled = k <= 0;
+    pfNext.disabled = k >= totalPaginas() - 1;
+  }
+  const irA = k => grilla.scrollTo({ left: k * anchoPagina(), behavior: "smooth" });
+  grilla.addEventListener("scroll", actualizarNav, { passive: true });
   pfPuntos.addEventListener("click", e => {
     const k = [...pfPuntos.children].indexOf(e.target);
-    if (k >= 0) grilla.scrollTo({ left: k * (grilla.clientWidth + 12), behavior: "smooth" });
+    if (k >= 0) irA(k);
   });
-  celuPortfolio.addEventListener("change", () => pintarGrilla());
+  pfPrev.addEventListener("click", () => irA(paginaActual() - 1));
+  pfNext.addEventListener("click", () => irA(paginaActual() + 1));
+  let colsAntes = 0;
+  addEventListener("resize", () => {
+    const c = columnas();
+    if (c !== colsAntes) { colsAntes = c; marcarInicios(); pintarPuntos(); grilla.scrollLeft = 0; }
+  });
 
   function pintarGrilla() {
     const items = lista();
-    const cuantos = celuPortfolio.matches ? items.length : mostrados;
     grilla.scrollLeft = 0;
-    grilla.innerHTML = items.slice(0, cuantos).map(p => `
+    grilla.innerHTML = items.map(p => `
       <button class="video-card" data-id="${p.id}" data-titulo="${p.titulo}">
         <div class="video-card__img">
           <img src="https://i.ytimg.com/vi/${p.id}/hqdefault.jpg" alt="" loading="lazy"
@@ -602,7 +629,8 @@
         <p class="video-card__titulo">${p.titulo}</p>
         <p class="video-card__cliente">${p.cliente}</p>
       </button>`).join("");
-    btnMas.hidden = cuantos >= items.length;
+    colsAntes = columnas();
+    marcarInicios();
     pintarPuntos();
   }
 
@@ -610,11 +638,9 @@
     const b = e.target.closest(".filtro");
     if (!b) return;
     filtroActivo = b.dataset.area;
-    mostrados = POR_PAGINA;
     pintarFiltros();
     pintarGrilla();
   });
-  btnMas.addEventListener("click", () => { mostrados += POR_PAGINA; pintarGrilla(); });
 
   // Modal de video
   const modal = document.getElementById("modal");
