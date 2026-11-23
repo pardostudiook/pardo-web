@@ -222,11 +222,11 @@ const Gancho = () => {
   // Prisamata (chica del sombrero) solo en dos planos: abre caminando y cierra en primer plano.
   const cortes = [
     ['prisamata-05', 17.0, 22],     // caminando entre las plantas
-    ['boulevard-reel-2', 3.75, 16], // Casino Boulevard: agarra la ficha y la muestra
+    ['boulevard-reel-2', 3.72, 16], // Casino Boulevard: agarra la ficha y la muestra (toma 3,71–4,25 s)
     ['videocaso-01', 1.5, 15],      // Agéntica: dron sobre el edificio
     ['videocaso-01', 23.3, 14],     // Agéntica: Camila sentada (toma final, sin cartel)
     ['riica-almora-03', 22.5, 13],  // RIICA: caminando en el campo
-    ['prisamata-05', 9.6, 62],      // primer plano con sombrero, detrás del título
+    ['prisamata-05', 9.1, 62],      // primer plano con sombrero, detrás del título (toma 8,44–11,20 s)
   ];
   const inicios = cortes.reduce((acc, c, i) => [...acc, i === 0 ? 0 : acc[i - 1] + cortes[i - 1][2]], []);
   const s = spring({ frame: f - 22, fps, config: { damping: 14, mass: 0.7 } });
@@ -317,10 +317,20 @@ const Servicios = () => {
 // 4. Portfolio: publicidad, institucional, videoclips — con los filtros de la web.
 const Portfolio = () => {
   const f = useCurrentFrame();
-  // Tomas del showreel: app de RIU, Medicenter, recital, RIU, sirena/yeti, llamas.
-  // Sin Satoshi Tango (42,5–44,5 s) ni Descoqueo (7,5 s y 35,5–38,5 s).
-  const cortes = [46.4, 22.4, 12.6, 8.4, 30.0, 40.0];
-  const largo = Math.ceil(ESCENAS.portfolio / cortes.length);
+  // Tomas del showreel: [segundo de inicio, cuadros]. Cada una queda ADENTRO de una sola toma del showreel
+  // (los cortes del showreel están anotados al lado), así no se cuelan cuadros de la toma siguiente.
+  // Sin Satoshi Tango (42,5–44,5 s) ni Descoqueo (7,5 s y 35,5–38,5 s). Tienen que sumar ESCENAS.portfolio.
+  const cortes = [
+    [45.66, 35], // app de RIU (toma 45,62–47,21; termina antes de que entre la tarjeta roja)
+    [22.83, 28], // Medicenter (22,79–23,79)
+    [12.25, 18], // recital, banda (12,21–12,88)
+    [12.92, 18], // recital, público (12,88–13,54)
+    [29.71, 22], // sirena (29,67–30,46)
+    [30.50, 22], // yeti (30,46–31,25)
+    [40.00, 22], // llamas (39,96–40,75)
+    [40.79, 30], // mapa con el recorrido (40,75–42,17)
+  ];
+  const inicios = cortes.reduce((acc, c, i) => [...acc, i === 0 ? 0 : acc[i - 1] + cortes[i - 1][1]], []);
   const top = 600;
   const alto = 1040;
   const filtros = ['Publicidad', 'Institucional', 'Contenido', 'Videoclips'];
@@ -328,8 +338,8 @@ const Portfolio = () => {
   return (
     <AbsoluteFill>
       <Papel />
-      {cortes.map((seg, i) => (
-        <Sequence key={i} from={i * largo} durationInFrames={largo}>
+      {cortes.map(([seg, dur], i) => (
+        <Sequence key={i} from={inicios[i]} durationInFrames={dur}>
           <Plano segundo={seg} top={top} alto={alto} />
         </Sequence>
       ))}
