@@ -739,16 +739,22 @@
             <button class="ig-card__sonido" aria-label="Activar sonido">${iconoMudo}</button>
           </div>
         </article>`).join("");
-      // Carga por adelantado: apenas termina de cargar la página, se empiezan a bajar
-      // los primeros videos (de a uno, en orden) aunque el visitante todavía no haya
-      // llegado a esta sección. El resto sigue bajando cuando la sección se acerca.
+      // Descarga a demanda: no se baja ningún video al abrir la página. Cuando la sección
+      // se acerca se bajan los primeros (de a uno), y después siempre unos pocos por delante
+      // de lo que la persona está mirando. Así cada visita baja solo lo que ve.
       // Las tarjetas aparecen escalonadas (fundido) cuando el visitante llega.
-      const ADELANTADOS = 6;
+      const ADELANTADOS = 4;
       const tarjetas = [...igPista.querySelectorAll(".ig-card")];
       const enVista = new Set();
       const vista = new IntersectionObserver(es => es.forEach(e => {
         const v = e.target;
-        if (e.isIntersecting) { enVista.add(v); if (v.closest(".ig-card").classList.contains("listo")) v.play().catch(() => {}); }
+        if (e.isIntersecting) {
+          enVista.add(v);
+          if (v.closest(".ig-card").classList.contains("listo")) v.play().catch(() => {});
+          // deja bajar hasta 3 videos más allá del que se está viendo
+          const k = tarjetas.indexOf(v.closest(".ig-card"));
+          if (cerca && k + 4 > permitido) { permitido = k + 4; if (!bajando) cargarSiguiente(); }
+        }
         else { enVista.delete(v); v.pause(); }
       }), { threshold: .5 });
       tarjetas.forEach(t => vista.observe(t.querySelector("video")));
@@ -771,7 +777,7 @@
       const marcarLista = t => { listas.add(t); if (seccionVisible) encolar(t); };
 
       // Descarga en fila, un video por vez
-      let siguiente = 0, permitido = ADELANTADOS, bajando = false;
+      let siguiente = 0, permitido = 0, bajando = false, cerca = false;
       const cargarSiguiente = () => {
         if (siguiente >= tarjetas.length || siguiente >= permitido) { bajando = false; return; }
         bajando = true;
@@ -784,12 +790,10 @@
         v.preload = "auto";
         v.load();
       };
-      const arrancarPrecarga = () => setTimeout(() => { if (!bajando) cargarSiguiente(); }, 1500);
-      if (document.readyState === "complete") arrancarPrecarga(); else addEventListener("load", arrancarPrecarga);
 
-      // Cuando la sección se acerca: habilita bajar todos; cuando se ve, muestra lo que ya está listo
+      // Cuando la sección se acerca: empieza a bajar los primeros; cuando se ve, muestra lo que ya está listo
       new IntersectionObserver((es, o) => {
-        if (es.some(e => e.isIntersecting)) { o.disconnect(); permitido = tarjetas.length; if (!bajando) cargarSiguiente(); }
+        if (es.some(e => e.isIntersecting)) { o.disconnect(); cerca = true; permitido = Math.max(permitido, ADELANTADOS); if (!bajando) cargarSiguiente(); }
       }, { rootMargin: "800px 0px" }).observe(igPista);
       new IntersectionObserver((es, o) => {
         if (es.some(e => e.isIntersecting)) {

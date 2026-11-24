@@ -1,7 +1,7 @@
 // Reel vertical (1080x1920) que presenta la nueva web de Pardo Studio.
 // Usa solo material de la web: showreel de portada, reels de clientes, texturas, logo y capturas.
 import {
-  AbsoluteFill, Img, OffthreadVideo, Sequence, Series, staticFile,
+  AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, Series, staticFile,
   interpolate, spring, useCurrentFrame, useVideoConfig, Easing,
 } from 'remotion';
 
@@ -11,17 +11,27 @@ const BLANCO = '#ffffff';
 const SUAVE = '#c9c6c9';
 const FUENTE = '"Red Hat Display", system-ui, sans-serif';
 
-// Duración de cada escena (en cuadros, 30 por segundo). Coinciden con el guion de voz.
+// Duración de cada escena (en cuadros, 30 por segundo). Ajustadas a la voz en off (reel/voz/*.mp3,
+// voz "Mauricio" de ElevenLabs, modelo v3): cada frase entra apenas empieza su escena y termina antes del corte.
 export const ESCENAS = {
-  gancho: 105,     // 0:00 – 0:03.5
-  web: 135,        // 0:03.5 – 0:08
-  servicios: 150,  // 0:08 – 0:13
-  portfolio: 180,  // 0:13 – 0:19
-  redes: 180,      // 0:19 – 0:25
-  contacto: 150,   // 0:25 – 0:30
-  cierre: 120,     // 0:30 – 0:34
+  gancho: 105,     // 0:00.0 – 0:03.5  voz 01 (1,3 s)
+  web: 192,        // 0:03.5 – 0:09.9  voz 02 (5,8 s)
+  servicios: 240,  // 0:09.9 – 0:17.9  voz 03 (6,2 s)
+  portfolio: 195,  // 0:17.9 – 0:24.4  voz 04 (5,2 s)
+  redes: 150,      // 0:24.4 – 0:29.4  voz 05 (3,3 s)
+  contacto: 150,   // 0:29.4 – 0:34.4  voz 06 (4,5 s)
+  cierre: 120,     // 0:34.4 – 0:38.4  voz 07 (3,2 s)
 };
 export const DURACION = Object.values(ESCENAS).reduce((a, b) => a + b, 0);
+
+// Cuántos cuadros después del corte entra la voz de cada escena (deja pasar el barrido rojo).
+const VOZ_DEMORA = { gancho: 12, web: 10, servicios: 10, portfolio: 10, redes: 10, contacto: 10, cierre: 14 };
+const VOZ_ARCHIVO = { gancho: '01', web: '02', servicios: '03', portfolio: '04', redes: '05', contacto: '06', cierre: '07' };
+const Voz = ({ escena }) => (
+  <Sequence from={VOZ_DEMORA[escena]}>
+    <Audio src={staticFile(`voz/${VOZ_ARCHIVO[escena]}.mp3`)} />
+  </Sequence>
+);
 
 // ---------- piezas comunes ----------
 
@@ -212,11 +222,11 @@ const Gancho = () => {
   // Prisamata (chica del sombrero) solo en dos planos: abre caminando y cierra en primer plano.
   const cortes = [
     ['prisamata-05', 17.0, 22],     // caminando entre las plantas
-    ['boulevard-reel-2', 3.75, 16], // Casino Boulevard: agarra la ficha y la muestra
+    ['boulevard-reel-2', 3.72, 16], // Casino Boulevard: agarra la ficha y la muestra (toma 3,71–4,25 s)
     ['videocaso-01', 1.5, 15],      // Agéntica: dron sobre el edificio
     ['videocaso-01', 23.3, 14],     // Agéntica: Camila sentada (toma final, sin cartel)
     ['riica-almora-03', 22.5, 13],  // RIICA: caminando en el campo
-    ['prisamata-05', 9.6, 62],      // primer plano con sombrero, detrás del título
+    ['prisamata-05', 9.1, 62],      // primer plano con sombrero, detrás del título (toma 8,44–11,20 s)
   ];
   const inicios = cortes.reduce((acc, c, i) => [...acc, i === 0 ? 0 : acc[i - 1] + cortes[i - 1][2]], []);
   const s = spring({ frame: f - 22, fps, config: { damping: 14, mass: 0.7 } });
@@ -297,7 +307,7 @@ const Servicios = () => {
       <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center', gap: 120 }}>
         <Sube desde={2} style={{ position: 'absolute', top: 190 }}><Etiqueta>Servicios</Etiqueta></Sube>
         {bloque(8, 'Content', 'Studio', 'Dirección creativa, estrategia y producción de contenido.')}
-        {bloque(60, 'Post', 'Studio', 'VFX, color grading, compositing y animación 2D y 3D.')}
+        {bloque(125, 'Post', 'Studio', 'VFX, color grading, compositing y animación 2D y 3D.')}
       </AbsoluteFill>
       <Barrido />
     </AbsoluteFill>
@@ -307,19 +317,29 @@ const Servicios = () => {
 // 4. Portfolio: publicidad, institucional, videoclips — con los filtros de la web.
 const Portfolio = () => {
   const f = useCurrentFrame();
-  // Tomas del showreel: app de RIU, Medicenter, recital, RIU, sirena/yeti, llamas.
-  // Sin Satoshi Tango (42,5–44,5 s) ni Descoqueo (7,5 s y 35,5–38,5 s).
-  const cortes = [46.4, 22.4, 12.6, 8.4, 30.0, 40.0];
-  const largo = 30;
+  // Tomas del showreel: [segundo de inicio, cuadros]. Cada una queda ADENTRO de una sola toma del showreel
+  // (los cortes del showreel están anotados al lado), así no se cuelan cuadros de la toma siguiente.
+  // Sin Satoshi Tango (42,5–44,5 s) ni Descoqueo (7,5 s y 35,5–38,5 s). Tienen que sumar ESCENAS.portfolio.
+  const cortes = [
+    [45.66, 35], // app de RIU (toma 45,62–47,21; termina antes de que entre la tarjeta roja)
+    [22.83, 28], // Medicenter (22,79–23,79)
+    [12.25, 18], // recital, banda (12,21–12,88)
+    [12.92, 18], // recital, público (12,88–13,54)
+    [29.71, 22], // sirena (29,67–30,46)
+    [30.50, 22], // yeti (30,46–31,25)
+    [40.00, 22], // llamas (39,96–40,75)
+    [40.79, 30], // mapa con el recorrido (40,75–42,17)
+  ];
+  const inicios = cortes.reduce((acc, c, i) => [...acc, i === 0 ? 0 : acc[i - 1] + cortes[i - 1][1]], []);
   const top = 600;
   const alto = 1040;
   const filtros = ['Publicidad', 'Institucional', 'Contenido', 'Videoclips'];
-  const activo = Math.min(filtros.length - 1, Math.floor(Math.max(0, f - 20) / 38));
+  const activo = Math.min(filtros.length - 1, Math.floor(Math.max(0, f - 20) / 48));
   return (
     <AbsoluteFill>
       <Papel />
-      {cortes.map((seg, i) => (
-        <Sequence key={i} from={i * largo} durationInFrames={largo}>
+      {cortes.map(([seg, dur], i) => (
+        <Sequence key={i} from={inicios[i]} durationInFrames={dur}>
           <Plano segundo={seg} top={top} alto={alto} />
         </Sequence>
       ))}
@@ -385,7 +405,8 @@ const Contacto = () => {
   const { fps } = useVideoConfig();
   const entra = spring({ frame: f - 10, fps, config: { damping: 18 } });
   const wa = spring({ frame: f - 62, fps, config: { damping: 11, mass: 0.6 } });
-  const scroll = interpolate(f, [20, 120], [14546, 15420], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic) });
+  // Sección "contacto" de la captura actual (top 4103 px CSS = 8206 px en la captura a 2x).
+  const scroll = interpolate(f, [20, 120], [8206, 9076], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic) });
   return (
     <AbsoluteFill>
       <AbsoluteFill style={{ overflow: 'hidden' }}>
@@ -437,13 +458,13 @@ const Cierre = () => {
 export const ReelWeb = () => (
   <AbsoluteFill style={{ backgroundColor: NEGRO, fontFamily: FUENTE }}>
     <Series>
-      <Series.Sequence durationInFrames={ESCENAS.gancho}><Gancho /></Series.Sequence>
-      <Series.Sequence durationInFrames={ESCENAS.web}><Web /></Series.Sequence>
-      <Series.Sequence durationInFrames={ESCENAS.servicios}><Servicios /></Series.Sequence>
-      <Series.Sequence durationInFrames={ESCENAS.portfolio}><Portfolio /></Series.Sequence>
-      <Series.Sequence durationInFrames={ESCENAS.redes}><Redes /></Series.Sequence>
-      <Series.Sequence durationInFrames={ESCENAS.contacto}><Contacto /></Series.Sequence>
-      <Series.Sequence durationInFrames={ESCENAS.cierre}><Cierre /></Series.Sequence>
+      <Series.Sequence durationInFrames={ESCENAS.gancho}><Gancho /><Voz escena="gancho" /></Series.Sequence>
+      <Series.Sequence durationInFrames={ESCENAS.web}><Web /><Voz escena="web" /></Series.Sequence>
+      <Series.Sequence durationInFrames={ESCENAS.servicios}><Servicios /><Voz escena="servicios" /></Series.Sequence>
+      <Series.Sequence durationInFrames={ESCENAS.portfolio}><Portfolio /><Voz escena="portfolio" /></Series.Sequence>
+      <Series.Sequence durationInFrames={ESCENAS.redes}><Redes /><Voz escena="redes" /></Series.Sequence>
+      <Series.Sequence durationInFrames={ESCENAS.contacto}><Contacto /><Voz escena="contacto" /></Series.Sequence>
+      <Series.Sequence durationInFrames={ESCENAS.cierre}><Cierre /><Voz escena="cierre" /></Series.Sequence>
     </Series>
   </AbsoluteFill>
 );
