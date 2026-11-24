@@ -735,7 +735,7 @@
       igPista.innerHTML = mezclarPorCliente(items).map(p => `
         <article class="ig-card">
           <div class="ig-card__marco">
-            <video src="${p.video}" poster="${p.video.replace(/\.mp4$/, ".jpg")}" muted loop playsinline preload="none" aria-label="Video para ${p.cliente}"></video>
+            <video src="${p.video}" data-poster="${p.video.replace(/\.mp4$/, ".jpg")}" muted loop playsinline preload="none" aria-label="Video para ${p.cliente}"></video>
             <button class="ig-card__sonido" aria-label="Activar sonido">${iconoMudo}</button>
           </div>
         </article>`).join("");
@@ -793,7 +793,12 @@
 
       // Cuando la sección se acerca: empieza a bajar los primeros; cuando se ve, muestra lo que ya está listo
       new IntersectionObserver((es, o) => {
-        if (es.some(e => e.isIntersecting)) { o.disconnect(); cerca = true; permitido = Math.max(permitido, ADELANTADOS); if (!bajando) cargarSiguiente(); }
+        if (es.some(e => e.isIntersecting)) {
+          o.disconnect(); cerca = true;
+          // las portadas también se cargan recién ahora, no al abrir la página
+          tarjetas.forEach(t => { const v = t.querySelector("video"); v.poster = v.dataset.poster; });
+          permitido = Math.max(permitido, ADELANTADOS); if (!bajando) cargarSiguiente();
+        }
       }, { rootMargin: "800px 0px" }).observe(igPista);
       new IntersectionObserver((es, o) => {
         if (es.some(e => e.isIntersecting)) {
